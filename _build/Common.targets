@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+
+    <Version>0.0.0.1</Version>
+    <CoverageTarget Condition="'$(CoverageTarget)'==''">90</CoverageTarget>
+
+    <NuGetExe>$(MSBuildThisFileDirectory)\..\packages\NuGet.CommandLine.3.4.3\tools\NuGet.exe</NuGetExe>
+    <OpenCoverExe>$(MSBuildThisFileDirectory)\..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe</OpenCoverExe>
+    <NUnitExe>$(MSBuildThisFileDirectory)\..\packages\NUnit.Runners.2.6.4\tools\nunit-console.exe</NUnitExe>
+    <ReportGeneratorExe>$(MSBuildThisFileDirectory)\..\packages\ReportGenerator.2.4.5.0\tools\ReportGenerator.exe</ReportGeneratorExe>
+    <VerifyCoverageJs>$(MSBuildThisFileDirectory)\VerifyCoverage.js</VerifyCoverageJs>
+
+    <Asterisk>%2A</Asterisk>
+    <TestAssembly>$(AssemblyName).dll</TestAssembly>
+    <TestOutput>$(AssemblyName).results.xml</TestOutput>
+    <CoverageOutput>$(OutDir)\$(AssemblyName).coverage.xml</CoverageOutput>
+    <TestSuccessFlag>$(OutDir)\$(AssemblyName).success.flg</TestSuccessFlag>
+    <CoverFilterFileOption Condition="!Exists('CoverageFilter.txt')"></CoverFilterFileOption>
+    <CoverFilterFileOption Condition="Exists('CoverageFilter.txt')">-filterfile:CoverageFilter.txt</CoverFilterFileOption>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <TestDependencies Include="$(OutDir)\$(AssemblyName).dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <CoverFilter Include="-[FluentAssertions$(Asterisk)]$(Asterisk)" />
+    <CoverFilter Include="-[FluentMigrator$(Asterisk)]$(Asterisk)" />
+    <CoverFilter Include="+[$(Asterisk)]$(Asterisk)" />
+  </ItemGroup>
+
+  <Target Name="RunTestsWithCoverage" Condition="'$(RunTests)'=='true'" Inputs="@(TestDependencies)" Outputs="$(TestSuccessFlag)">
+    <Exec Command="$(OpenCoverExe) -targetdir:$(OutDir) -target:$(NUnitExe) -targetargs:&quot;$(TestAssembly) /result=$(TestOutput)&quot; -register:user -output:$(CoverageOutput) -returntargetcode -filter:&quot;@(CoverFilter, ' ')&quot; $(CoverFilterFileOption)" />
+    <RemoveDir Directories="$(OutDir)\CoverageReport" />
+    <Exec Command="$(ReportGeneratorExe) -reports:$(CoverageOutput) -targetdir:$(OutDir)\CoverageReport -verbosity:Error -ReportTypes:Html;XmlSummary" />
+    <Exec Command="CScript //NoLogo $(VerifyCoverageJs) $(CoverageTarget) $(OutDir)\CoverageReport\Summary.xml" />
+    <Touch Files="$(TestSuccessFlag)" AlwaysCreate="true" />
+  </Target>
+
+</Project>

@@ -1,0 +1,8 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" />
+  <Config name="Debug" binpathtype="Auto">
+    <assembly path="..\Reposify.Database.Tests\bin\Debug\Reposify.Database.Tests.dll" />
+    <assembly path="..\Reposify.Tests\bin\Debug\Reposify.Tests.dll" />
+    <assembly path="..\Reposify.NHibernate.Tests\bin\Debug\Reposify.NHibernate.Tests.dll" />
+  </Config>
+</NUnitProject>

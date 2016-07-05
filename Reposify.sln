@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify", "Reposify\Reposify.csproj", "{AD59FD30-63D8-4416-9703-93D5854C2886}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_items", "_items", "{5FE3875B-BC5C-48E0-ABE0-91A639F2F419}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Reposify.proj = Reposify.proj
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_build", "_build", "{FE2F54DC-670B-49FE-A14D-0EB2EAF7A799}"
+	ProjectSection(SolutionItems) = preProject
+		_build\Common.targets = _build\Common.targets
+		_build\DefaultEnvironment.xml = _build\DefaultEnvironment.xml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.Database.Tests", "Reposify.Database.Tests\Reposify.Database.Tests.csproj", "{C976D0C2-11A6-4993-A338-BDBAA0BFC67D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.NHibernate", "Reposify.NHibernate\Reposify.NHibernate.csproj", "{D824C9D7-9A47-4221-897C-DB99FE98C0D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.NHibernate.Tests", "Reposify.NHibernate.Tests\Reposify.NHibernate.Tests.csproj", "{695ACEBF-E566-45C0-99ED-BDA9B85BDBBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.Testing", "Reposify.Testing\Reposify.Testing.csproj", "{D0D43151-7A59-4FBD-BB3A-087AE0B5DF06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.Tests", "Reposify.Tests\Reposify.Tests.csproj", "{F66200E6-6F80-4355-96E4-84439F7EA652}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD59FD30-63D8-4416-9703-93D5854C2886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD59FD30-63D8-4416-9703-93D5854C2886}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD59FD30-63D8-4416-9703-93D5854C2886}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD59FD30-63D8-4416-9703-93D5854C2886}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C976D0C2-11A6-4993-A338-BDBAA0BFC67D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C976D0C2-11A6-4993-A338-BDBAA0BFC67D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C976D0C2-11A6-4993-A338-BDBAA0BFC67D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C976D0C2-11A6-4993-A338-BDBAA0BFC67D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D824C9D7-9A47-4221-897C-DB99FE98C0D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D824C9D7-9A47-4221-897C-DB99FE98C0D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D824C9D7-9A47-4221-897C-DB99FE98C0D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D824C9D7-9A47-4221-897C-DB99FE98C0D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{695ACEBF-E566-45C0-99ED-BDA9B85BDBBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{695ACEBF-E566-45C0-99ED-BDA9B85BDBBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{695ACEBF-E566-45C0-99ED-BDA9B85BDBBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{695ACEBF-E566-45C0-99ED-BDA9B85BDBBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0D43151-7A59-4FBD-BB3A-087AE0B5DF06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0D43151-7A59-4FBD-BB3A-087AE0B5DF06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0D43151-7A59-4FBD-BB3A-087AE0B5DF06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0D43151-7A59-4FBD-BB3A-087AE0B5DF06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F66200E6-6F80-4355-96E4-84439F7EA652}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F66200E6-6F80-4355-96E4-84439F7EA652}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F66200E6-6F80-4355-96E4-84439F7EA652}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F66200E6-6F80-4355-96E4-84439F7EA652}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FE2F54DC-670B-49FE-A14D-0EB2EAF7A799} = {5FE3875B-BC5C-48E0-ABE0-91A639F2F419}
+	EndGlobalSection
+EndGlobal

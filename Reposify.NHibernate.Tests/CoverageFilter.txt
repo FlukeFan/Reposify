@@ -1,0 +1,4 @@
+-[Reposify]*
+-[Reposify.Testing]*
+-[Reposify.Tests]*
+-[Reposify.Database.Tests]*
