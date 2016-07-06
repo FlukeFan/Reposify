@@ -11,6 +11,7 @@ To build, open CommandPrompt.bat, and type 'b'.
 
 Build commands:
 
-b                   : build
-b /t:clean          : clean
-b /t:push           : Push packages to NuGet and publish them (setApiKey before running this)
+b                               : build
+b /t:clean                      : clean
+b /t:setApiKey /p:apiKey=[key]  : set the api key
+b /t:push                       : Push packages to NuGet and publish them (setApiKey before running this)

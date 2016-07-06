@@ -89,15 +89,19 @@
       OutputFile="_build\AssemblyInfo.cs"
       />
   </Target>
+  
+  <Target Name="SetApiKey">
+    <Exec Command="$(NuGetExe) setApiKey $(apiKey) -Source nuget.org" />
+  </Target>
 
   <Target Name="Push">
     <RemoveDir Directories="packaged" />
     <CallTarget Targets="SetReleaseConfiguration" />
     <CallTarget Targets="Init" />
     <CallTarget Targets="Build" />
-    <Exec Command="$(NuGetExe) push packaged\Reposify.$(Version).nupkg" />
-    <Exec Command="$(NuGetExe) push packaged\Reposify.Testing.$(Version).nupkg" />
-    <Exec Command="$(NuGetExe) push packaged\Reposify.NHibernate.$(Version).nupkg" />
+    <Exec Command="$(NuGetExe) push packaged\Reposify.$(Version).nupkg -Source nuget.org -NonInteractive" />
+    <Exec Command="$(NuGetExe) push packaged\Reposify.Testing.$(Version).nupkg -Source nuget.org -NonInteractive" />
+    <Exec Command="$(NuGetExe) push packaged\Reposify.NHibernate.$(Version).nupkg -Source nuget.org -NonInteractive" />
     <CallTarget Targets="Clean" />
   </Target>
 
