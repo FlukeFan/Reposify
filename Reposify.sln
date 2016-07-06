@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_items", "_items", "{5FE3875B-BC5C-48E0-ABE0-91A639F2F419}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		readme.txt = readme.txt
 		Reposify.proj = Reposify.proj
 	EndProjectSection
 EndProject
