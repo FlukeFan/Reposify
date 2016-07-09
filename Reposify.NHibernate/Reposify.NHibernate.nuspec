@@ -3,8 +3,16 @@
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
+    <title>$id$</title>
+    <description>Reposify NHibernate implementation.</description>
+    <tags>Repository NHibernate</tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Reposify.NHibernate</description>
     <authors>Richard Brown</authors>
+    <licenseUrl>https://raw.githubusercontent.com/FlukeFan/Reposify/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/FlukeFan/Reposify</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/FlukeFan/Reposify/master/icon.png</iconUrl>
+    <dependencies>
+      <dependency id="Reposify" />
+    </dependencies> 
   </metadata>
 </package>
