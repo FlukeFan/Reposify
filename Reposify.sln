@@ -8,14 +8,19 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_items", "_items", "{5FE3875B-BC5C-48E0-ABE0-91A639F2F419}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		CommandPrompt.bat = CommandPrompt.bat
+		LICENSE.txt = LICENSE.txt
 		readme.txt = readme.txt
 		Reposify.proj = Reposify.proj
+		RunNUnit.bat = RunNUnit.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_build", "_build", "{FE2F54DC-670B-49FE-A14D-0EB2EAF7A799}"
 	ProjectSection(SolutionItems) = preProject
 		_build\Common.targets = _build\Common.targets
 		_build\DefaultEnvironment.xml = _build\DefaultEnvironment.xml
+		_build\Reposify.nunit = _build\Reposify.nunit
+		_build\VerifyCoverage.js = _build\VerifyCoverage.js
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.Database.Tests", "Reposify.Database.Tests\Reposify.Database.Tests.csproj", "{C976D0C2-11A6-4993-A338-BDBAA0BFC67D}"
