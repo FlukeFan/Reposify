@@ -8,7 +8,7 @@
 
 _build/BuildEnvironment.xml
 _build/AssemblyInfo.cs
+_build/Reposify.VisualState.xml
 
 /.vs
 /packaged
-
