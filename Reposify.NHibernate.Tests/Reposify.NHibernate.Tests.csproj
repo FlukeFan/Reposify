@@ -63,11 +63,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\_build\AssemblyInfo.cs" />
+    <Compile Include="..\_output\AssemblyInfo.cs" />
     <Compile Include="NhRepositoryTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\_build\Common.targets" />
+  <Import Project="..\Build\Common.targets" />
   <ItemGroup>
     <ProjectReference Include="..\Reposify.Database.Tests\Reposify.Database.Tests.csproj">
       <Project>{c976d0c2-11a6-4993-a338-bdbaa0bfc67d}</Project>

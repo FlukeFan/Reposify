@@ -4,7 +4,7 @@
     <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\packages\MSBuildTasks.1.5.0.196\tools</MSBuildCommunityTasksPath>
   </PropertyGroup>
 
-  <Import Project="_build\Common.targets" />
+  <Import Project="Build\Common.targets" />
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
 
   <PropertyGroup>
@@ -22,7 +22,7 @@
       <Output TaskParameter="Value" PropertyName="GlobalProperties" />
     </CreateProperty>
     <Copy SourceFiles="@(MSBuildXsd)" DestinationFolder="$(MSBuildCommunityTasksPath)" />
-    <Copy SourceFiles="_build\DefaultEnvironment.xml" DestinationFiles="_build\BuildEnvironment.xml" Condition="!Exists('_build\BuildEnvironment.xml') OR $([System.IO.File]::GetLastWriteTime('_build\DefaultEnvironment.xml').Ticks) &gt; $([System.IO.File]::GetLastWriteTime('_build\BuildEnvironment.xml').Ticks)" />
+    <Copy SourceFiles="Build\DefaultEnvironment.xml" DestinationFiles="_output\BuildEnvironment.xml" Condition="!Exists('_output\BuildEnvironment.xml') OR $([System.IO.File]::GetLastWriteTime('Build\DefaultEnvironment.xml').Ticks) &gt; $([System.IO.File]::GetLastWriteTime('_output\BuildEnvironment.xml').Ticks)" />
   </Target>
 
   <Target Name="SetReleaseConfiguration">
@@ -39,7 +39,6 @@
 
   <Target Name="Build" DependsOnTargets="Init">
     <CallTarget Targets="GenerateAssemblyInfo" />
-    <MakeDir Directories="packaged" />
     <MSBuild Projects="@(ProjectsToBuild)" Properties="$(GlobalProperties)" RunEachTargetSeparately="True" StopOnFirstFailure="True" />
   </Target>
 
@@ -55,8 +54,7 @@
   
   <Target Name="CleanFiles">
     <MSBuild Projects="@(ProjectsToClean)" Properties="$(GlobalProperties)" RunEachTargetSeparately="True" StopOnFirstFailure="True" Targets="Clean" />
-    <RemoveDir Directories="packaged" />
-    <Delete Files="AssemblyInfo.cs" />
+    <RemoveDir Directories="_output" />
   </Target>
 
   <ItemGroup>
@@ -77,16 +75,14 @@
     <ProjectsToClean Include="Reposify\Reposify.csproj"/>
   </ItemGroup>
 
-  <Target Name="GenerateAssemblyInfo" Inputs="_build\Common.targets" Outputs="_build\AssemblyInfo.cs">
-    <RemoveDir Directories="packaged" />
-    <RemoveDir Directories="Demo\packages" Condition="'$(AppHarbor)' != 'true'" />
+  <Target Name="GenerateAssemblyInfo" Inputs="Build\Common.targets" Outputs="_output\AssemblyInfo.cs">
     <AssemblyInfo
       CodeLanguage="CS"
       AssemblyDescription="Reposify"
       AssemblyTitle="Reposify"
       AssemblyProduct="Reposify $(Configuration) $(Version)"
       AssemblyVersion="$(Version)"
-      OutputFile="_build\AssemblyInfo.cs"
+      OutputFile="_output\AssemblyInfo.cs"
       />
   </Target>
   
@@ -95,13 +91,13 @@
   </Target>
 
   <Target Name="Push">
-    <RemoveDir Directories="packaged" />
+    <RemoveDir Directories="_output" />
     <CallTarget Targets="SetReleaseConfiguration" />
     <CallTarget Targets="Init" />
     <CallTarget Targets="Build" />
-    <Exec Command="$(NuGetExe) push packaged\Reposify.$(Version).nupkg -Source nuget.org -NonInteractive" />
-    <Exec Command="$(NuGetExe) push packaged\Reposify.Testing.$(Version).nupkg -Source nuget.org -NonInteractive" />
-    <Exec Command="$(NuGetExe) push packaged\Reposify.NHibernate.$(Version).nupkg -Source nuget.org -NonInteractive" />
+    <Exec Command="$(NuGetExe) push _output\Reposify.$(Version).nupkg -Source nuget.org -NonInteractive" />
+    <Exec Command="$(NuGetExe) push _output\Reposify.Testing.$(Version).nupkg -Source nuget.org -NonInteractive" />
+    <Exec Command="$(NuGetExe) push _output\Reposify.NHibernate.$(Version).nupkg -Source nuget.org -NonInteractive" />
     <CallTarget Targets="Clean" />
   </Target>
 

@@ -12,7 +12,7 @@ namespace Reposify.Database.Tests
         public static BuildEnvironment Load()
         {
             var folder = Environment.CurrentDirectory;
-            var searchFile = "_build/BuildEnvironment.xml";
+            var searchFile = "_output/BuildEnvironment.xml";
 
             while (!File.Exists(Path.Combine(folder, searchFile)))
             {

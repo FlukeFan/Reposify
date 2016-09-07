@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify", "Reposify\Reposify.csproj", "{AD59FD30-63D8-4416-9703-93D5854C2886}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_items", "_items", "{5FE3875B-BC5C-48E0-ABE0-91A639F2F419}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{5FE3875B-BC5C-48E0-ABE0-91A639F2F419}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		CommandPrompt.bat = CommandPrompt.bat
@@ -13,14 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_items", "_items", "{5FE387
 		readme.txt = readme.txt
 		Reposify.proj = Reposify.proj
 		RunNUnit.bat = RunNUnit.bat
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_build", "_build", "{FE2F54DC-670B-49FE-A14D-0EB2EAF7A799}"
-	ProjectSection(SolutionItems) = preProject
-		_build\Common.targets = _build\Common.targets
-		_build\DefaultEnvironment.xml = _build\DefaultEnvironment.xml
-		_build\Reposify.nunit = _build\Reposify.nunit
-		_build\VerifyCoverage.js = _build\VerifyCoverage.js
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.Database.Tests", "Reposify.Database.Tests\Reposify.Database.Tests.csproj", "{C976D0C2-11A6-4993-A338-BDBAA0BFC67D}"
@@ -32,6 +24,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.Testing", "Reposify.Testing\Reposify.Testing.csproj", "{D0D43151-7A59-4FBD-BB3A-087AE0B5DF06}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.Tests", "Reposify.Tests\Reposify.Tests.csproj", "{F66200E6-6F80-4355-96E4-84439F7EA652}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{6FC380D2-3FC4-423D-B933-166545CC7F3C}"
+	ProjectSection(SolutionItems) = preProject
+		Build\Common.targets = Build\Common.targets
+		Build\DefaultEnvironment.xml = Build\DefaultEnvironment.xml
+		Build\Reposify.nunit = Build\Reposify.nunit
+		Build\VerifyCoverage.js = Build\VerifyCoverage.js
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,8 +66,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{FE2F54DC-670B-49FE-A14D-0EB2EAF7A799} = {5FE3875B-BC5C-48E0-ABE0-91A639F2F419}
 	EndGlobalSection
 EndGlobal

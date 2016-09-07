@@ -56,7 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\_build\AssemblyInfo.cs" />
+    <Compile Include="..\_output\AssemblyInfo.cs" />
     <Compile Include="IRepositoryTests.cs" />
     <Compile Include="TestsBuilderExtensions.cs" />
     <Compile Include="TestsEntity.cs" />
@@ -69,7 +69,7 @@
     <Compile Include="Testing\MemoryRepositoryTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\_build\Common.targets" />
+  <Import Project="..\Build\Common.targets" />
   <ItemGroup>
     <ProjectReference Include="..\Reposify.Testing\Reposify.Testing.csproj">
       <Project>{d0d43151-7a59-4fbd-bb3a-087ae0b5df06}</Project>
