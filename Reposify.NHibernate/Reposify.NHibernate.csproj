@@ -63,20 +63,12 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\Build\Common.targets" />
   <ItemGroup>
-    <PackageDependencies Include="bin\$(Configuration)\$(AssemblyName).dll">
-      <InProject>False</InProject>
-    </PackageDependencies>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Reposify\Reposify.csproj">
       <Project>{ad59fd30-63d8-4416-9703-93d5854c2886}</Project>
       <Name>Reposify</Name>
     </ProjectReference>
   </ItemGroup>
-  <Target Name="Package" Inputs="@(PackageDependencies)" Outputs="..\_output\$(AssemblyName).$(Version).nupkg">
-    <Exec Command="$(NuGetExe) pack $(MSBuildProjectFile) -OutputDirectory ..\_output -Properties Configuration=$(Configuration);OutDir=$(OutDir)" />
-  </Target>
   <Target Name="AfterBuild">
-    <CallTarget Targets="Package" />
+    <CallTarget Targets="PackageNuGet" />
   </Target>
 </Project>

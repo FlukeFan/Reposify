@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MSBuild/Community/Tasks ..\packages\MSBuildTasks.1.5.0.196\tools\MSBuild.Community.Tasks.xsd">
 
   <PropertyGroup>
 
@@ -38,6 +38,16 @@
     <Exec Command="$(ReportGeneratorExe) -reports:$(CoverageOutput) -targetdir:$(OutDir)\CoverageReport -verbosity:Error -ReportTypes:Html;XmlSummary" />
     <Exec Command="CScript //NoLogo $(VerifyCoverageJs) $(CoverageTarget) $(OutDir)\CoverageReport\Summary.xml" />
     <Touch Files="$(TestSuccessFlag)" AlwaysCreate="true" />
+  </Target>
+
+  <ItemGroup>
+    <PackageDependencies Include="$(AssemblyName).nuspec" />
+    <PackageDependencies Include="bin\$(Configuration)\$(AssemblyName).dll" />
+  </ItemGroup>
+
+  <Target Name="PackageNuGet" Inputs="@(PackageDependencies)" Outputs="..\_output\$(AssemblyName).$(Version).nupkg">
+    <Error Text="Missing $(AssemblyName).nuspec" Condition="!Exists('$(AssemblyName).nuspec')" />
+    <Exec Command="$(NuGetExe) pack $(MSBuildProjectFile) -OutputDirectory ..\_output -Properties Configuration=$(Configuration);OutDir=$(OutDir)" />
   </Target>
 
 </Project>
