@@ -34,6 +34,24 @@ namespace Reposify.Testing
                 CheckMsSqlDateTime(property.Name, (DateTime)property.GetValue(entity));
         }
 
+        public void Check<T>(Expression<Func<T>> property, Action<T> validate)
+        {
+            var value = property.Compile().Invoke();
+            Action validateAction = () => validate(value);
+            Check(Builder.GetPropertyName(property.Body), validateAction);
+        }
+
+        public void Check(string propertyName, Action validate)
+        {
+            try {
+                validate();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(string.Format("property {0} is not valid: {1}", propertyName, e.Message), e);
+            }
+        }
+
         public void CheckMsSqlDateTime(Expression<Func<DateTime>> property)
         {
             CheckMsSqlDateTime(Builder.GetPropertyName(property.Body), property.Compile().Invoke());
@@ -78,6 +96,20 @@ namespace Reposify.Testing
         {
             if (value != null && value.Length > maxLength)
                 throw new Exception(string.Format("string property {0} has length {1} which is larger than the maximum length of {2}", propertyName, value.Length, maxLength));
+        }
+
+        public void CheckMinLength(Expression<Func<string>> property, int minLength)
+        {
+            CheckMinLength(Builder.GetPropertyName(property.Body), property.Compile().Invoke(), minLength);
+        }
+
+        public void CheckMinLength(string propertyName, string value, int minLength)
+        {
+            if (value == null)
+                throw new Exception(string.Format("string property {0} is null which is smaller than the minimum length of {1}", propertyName, minLength));
+
+            if (value != null && value.Length < minLength)
+                throw new Exception(string.Format("string property {0} has length {1} which is smaller than the minimum length of {2}", propertyName, value.Length, minLength));
         }
     }
 }
