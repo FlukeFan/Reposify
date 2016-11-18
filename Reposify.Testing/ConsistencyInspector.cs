@@ -97,19 +97,5 @@ namespace Reposify.Testing
             if (value != null && value.Length > maxLength)
                 throw new Exception(string.Format("string property {0} has length {1} which is larger than the maximum length of {2}", propertyName, value.Length, maxLength));
         }
-
-        public void CheckMinLength(Expression<Func<string>> property, int minLength)
-        {
-            CheckMinLength(Builder.GetPropertyName(property.Body), property.Compile().Invoke(), minLength);
-        }
-
-        public void CheckMinLength(string propertyName, string value, int minLength)
-        {
-            if (value == null)
-                throw new Exception(string.Format("string property {0} is null which is smaller than the minimum length of {1}", propertyName, minLength));
-
-            if (value != null && value.Length < minLength)
-                throw new Exception(string.Format("string property {0} has length {1} which is smaller than the minimum length of {2}", propertyName, value.Length, minLength));
-        }
     }
 }

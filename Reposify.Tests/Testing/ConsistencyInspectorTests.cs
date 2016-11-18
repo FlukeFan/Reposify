@@ -55,7 +55,6 @@ namespace Reposify.Tests.Testing
             Assert.DoesNotThrow(() => inspector.CheckNotNull(() => entity.NullableDateTime));
             Assert.DoesNotThrow(() => inspector.CheckNotNullOrEmpty(() => entity.String));
             Assert.DoesNotThrow(() => inspector.CheckMaxLength(() => entity.String, 8));
-            Assert.DoesNotThrow(() => inspector.CheckMinLength(() => entity.String, 8));
         }
 
         [Test]
@@ -122,28 +121,6 @@ namespace Reposify.Tests.Testing
             var e = Assert.Throws<Exception>(() => inspector.CheckMaxLength(() => entity.String, 6));
 
             e.Message.Should().Contain("string property String has length 7 which is larger than the maximum length of 6");
-        }
-
-        [Test]
-        public void CheckMinLength_ThrowsWhenTooSmall()
-        {
-            var inspector = new ConsistencyInspector();
-            var entity = new FakeEntity { String = "123" };
-
-            var e = Assert.Throws<Exception>(() => inspector.CheckMinLength(() => entity.String, 4));
-
-            e.Message.Should().Contain("string property String has length 3 which is smaller than the minimum length of 4");
-        }
-
-        [Test]
-        public void CheckMinLength_ThrowsWhenNull()
-        {
-            var inspector = new ConsistencyInspector();
-            var entity = new FakeEntity { String = null };
-
-            var e = Assert.Throws<Exception>(() => inspector.CheckMinLength(() => entity.String, 4));
-
-            e.Message.Should().Contain("string property String is null which is smaller than the minimum length of 4");
         }
     }
 }
