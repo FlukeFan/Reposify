@@ -1,11 +1,11 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MSBuild/Community/Tasks packages\MSBuildTasks.1.5.0.214\tools\MSBuild.Community.Tasks.xsd">
 
   <PropertyGroup>
-    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\packages\MSBuildTasks.1.5.0.214\tools</MSBuildCommunityTasksPath>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\packages\MSBuildTasks.1.5.0.235\tools</MSBuildCommunityTasksPath>
   </PropertyGroup>
 
   <Import Project="Build\Common.targets" />
-  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" Condition="Exists('$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets')" />
 
   <PropertyGroup>
     <SolutionDir>$(MSBuildProjectDirectory)\</SolutionDir>
@@ -17,7 +17,12 @@
     <MSBuildXsd Include="lib\MSBuild\*.xsd" />
   </ItemGroup>
 
+  <Target Name="RestorePackages">
+    <Exec Command="lib\NuGet\NuGet.exe restore" />
+  </Target>
+
   <Target Name="Init">
+    <Error Text="Missing NuGet packages - try running 'b /t:RestorePackages'" Condition="!Exists('$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets')" />
     <CreateProperty Value="Configuration=$(Configuration);RunTests=$(RunTests)">
       <Output TaskParameter="Value" PropertyName="GlobalProperties" />
     </CreateProperty>
