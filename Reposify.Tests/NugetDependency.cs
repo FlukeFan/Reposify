@@ -45,24 +45,26 @@ namespace Reposify.Tests
 
             var archiveFile = archiveFiles.Single();
 
-            var archive = ZipFile.OpenRead(archiveFile);
-            var nuspecName = name + ".nuspec";
-            var entries = archive.Entries;
-            var nuspecs = entries.Where(e => e.Name == nuspecName).ToList();
-
-            if (nuspecs.Count != 1)
-                throw new Exception(string.Format("Could not find '{0}' in:\n{1}",
-                    nuspecName,
-                    string.Join("\n", entries.Select(e => e.FullName))));
-
-            var nuspec = nuspecs.Single();
-
-            using (var stream = nuspec.Open())
+            using (var archive = ZipFile.OpenRead(archiveFile))
             {
-                var doc = new XmlDocument();
-                doc.Load(stream);
-                var dependencies = doc.SelectNodes("//*[local-name()='dependencies']/*[local-name()='dependency']");
-                return dependencies.Cast<XmlElement>().Select(e => new NugetDependency(e)).ToList();
+                var nuspecName = name + ".nuspec";
+                var entries = archive.Entries;
+                var nuspecs = entries.Where(e => e.Name == nuspecName).ToList();
+
+                if (nuspecs.Count != 1)
+                    throw new Exception(string.Format("Could not find '{0}' in:\n{1}",
+                        nuspecName,
+                        string.Join("\n", entries.Select(e => e.FullName))));
+
+                var nuspec = nuspecs.Single();
+
+                using (var stream = nuspec.Open())
+                {
+                    var doc = new XmlDocument();
+                    doc.Load(stream);
+                    var dependencies = doc.SelectNodes("//*[local-name()='dependencies']/*[local-name()='dependency']");
+                    return dependencies.Cast<XmlElement>().Select(e => new NugetDependency(e)).ToList();
+                }
             }
         }
 
