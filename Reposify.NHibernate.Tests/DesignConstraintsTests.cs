@@ -7,7 +7,6 @@ namespace Reposify.NHibernate.Tests
     public class DesignContraintsTests
     {
         [Test]
-        [Ignore("Not got this working yet - shouldn't be an Iesi.Collections dependency")]
         public void DependenciesHaveNotChanged()
         {
             var folder = @"..\..\..\_output";

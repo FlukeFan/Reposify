@@ -13,6 +13,6 @@
     <iconUrl>https://raw.githubusercontent.com/FlukeFan/Reposify/master/icon.png</iconUrl>
     <dependencies>
       <dependency id="Reposify" version="$version$" />
-    </dependencies> 
+    </dependencies>
   </metadata>
 </package>
