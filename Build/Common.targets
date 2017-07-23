@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MSBuild/Community/Tasks ..\packages\MSBuildTasks.1.5.0.214\tools\MSBuild.Community.Tasks.xsd">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MSBuild/Community/Tasks ..\packages\MSBuildTasks.1.5.0.235\tools\MSBuild.Community.Tasks.xsd">
 
   <PropertyGroup>
 
-    <Version>0.0.0.7</Version>
+    <Version>0.0.0.8</Version>
     <CoverageTarget Condition="'$(CoverageTarget)'==''">90</CoverageTarget>
 
     <NuGetExe>$(MSBuildThisFileDirectory)\..\packages\NuGet.CommandLine.4.1.0\tools\NuGet.exe</NuGetExe>
