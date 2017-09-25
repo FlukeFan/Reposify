@@ -13,6 +13,7 @@
     <iconUrl>https://raw.githubusercontent.com/FlukeFan/Reposify/master/icon.png</iconUrl>
     <dependencies>
       <dependency id="Reposify" version="$version$" />
+      <dependency id="NHibernate" version="4.0.0.4000" />
     </dependencies>
   </metadata>
 </package>

@@ -15,7 +15,7 @@ namespace Reposify.NHibernate.Tests
             NugetDependency.VerifyDependencies(folder, name, new string[]
             {
                 "Reposify:*",
-                "NHibernate:4.1.1.4000",
+                "NHibernate:4.0.0.4000",
             });
         }
     }
