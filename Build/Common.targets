@@ -9,7 +9,7 @@
     <NuGetExe>$(MSBuildThisFileDirectory)\..\packages\NuGet.CommandLine.4.3.0\tools\NuGet.exe</NuGetExe>
     <OpenCoverExe>$(MSBuildThisFileDirectory)\..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe</OpenCoverExe>
     <NUnitExe>$(MSBuildThisFileDirectory)\..\packages\NUnit.Runners.2.6.4\tools\nunit-console.exe</NUnitExe>
-    <ReportGeneratorExe>$(MSBuildThisFileDirectory)\..\packages\ReportGenerator.3.0.0\tools\ReportGenerator.exe</ReportGeneratorExe>
+    <ReportGeneratorExe>$(MSBuildThisFileDirectory)\..\packages\ReportGenerator.3.0.2\tools\ReportGenerator.exe</ReportGeneratorExe>
     <VerifyCoverageJs>$(MSBuildThisFileDirectory)\VerifyCoverage.js</VerifyCoverageJs>
 
     <Asterisk>%2A</Asterisk>
