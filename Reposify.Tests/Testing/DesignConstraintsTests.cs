@@ -11,7 +11,7 @@ namespace Reposify.Tests.Testing
             var folder = @"..\..\..\_output";
             var name = "Reposify.Testing";
 
-            NugetDependency.VerifyDependencies(folder, name, new string[]
+            NugetPackage.VerifyDependencies(folder, name, new string[]
             {
                 "Reposify:*",
             });

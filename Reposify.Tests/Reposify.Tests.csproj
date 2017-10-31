@@ -59,7 +59,7 @@
     <Compile Include="..\_output\AssemblyInfo.cs" />
     <Compile Include="DesignContraintsTests.cs" />
     <Compile Include="IRepositoryTests.cs" />
-    <Compile Include="NugetDependency.cs" />
+    <Compile Include="NugetPackage.cs" />
     <Compile Include="Testing\DesignConstraintsTests.cs" />
     <Compile Include="TestsBuilderExtensions.cs" />
     <Compile Include="TestsEntity.cs" />
