@@ -26,6 +26,7 @@ namespace Reposify.Database.Tests
             CREATE TABLE [dbo].[PolyType](
                 [Id]                [int] IDENTITY(1,1) NOT NULL,
                 [String]            [varchar](255)      NOT NULL,
+                [BigString]         [varchar](max)      NOT NULL,
                 [Int]               [int]               NOT NULL,
                 [DateTime]          [datetime]          NOT NULL,
                 [Enum]              [int]               NOT NULL,

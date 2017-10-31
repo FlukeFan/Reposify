@@ -1,8 +1,10 @@
 ﻿using FluentAssertions;
+using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
+using NHibernate.Mapping.ByCode;
 using NUnit.Framework;
 using Reposify.Database.Tests;
 using Reposify.Testing;
@@ -16,7 +18,15 @@ namespace Reposify.NHibernate.Tests
         {
             var environment = BuildEnvironment.Load();
 
-            NhRepository<int>.Init(NhHelper.CreateConfig<int>(typeof(TestsEntity), cfg =>
+            var mapper = new ConventionModelMapper();
+            mapper.BeforeMapProperty += (modelInspector, member, propertyCustomizer) =>
+            {
+                if (member.LocalMember.Name == "BigString")
+                    propertyCustomizer.Type(NHibernateUtil.StringClob);
+            };
+
+            var mappings = NhHelper.CreateConventionalMappings<int>(typeof(TestsEntity), mapper);
+            var config = NhHelper.CreateConfig(mappings, cfg =>
             {
                 cfg.DataBaseIntegration(db =>
                 {
@@ -25,7 +35,9 @@ namespace Reposify.NHibernate.Tests
                     db.Driver<SqlClientDriver>();
                     db.Dialect<MsSql2008Dialect>();
                 });
-            }));
+            });
+
+            NhRepository<int>.Init(config);
         }
 
         private NhRepository<int> _repository;

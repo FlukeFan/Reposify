@@ -14,6 +14,7 @@ namespace Reposify.Tests
         protected PolyType() { }
 
         public virtual string       String              { get; protected set; }
+        public virtual string       BigString           { get; protected set; }
         public virtual int          Int                 { get; protected set; }
         public virtual DateTime     DateTime            { get; protected set; }
         public virtual Values       Enum                { get; protected set; }

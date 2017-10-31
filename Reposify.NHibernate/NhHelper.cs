@@ -8,9 +8,9 @@ namespace Reposify.NHibernate
 {
     public static class NhHelper
     {
-        public static HbmMapping CreateConventionalMappings<TId>(Type rootEntityType)
+        public static HbmMapping CreateConventionalMappings<TId>(Type rootEntityType, ConventionModelMapper mapper = null)
         {
-            var mapper = new ConventionModelMapper();
+            mapper = mapper ?? new ConventionModelMapper();
 
             var baseEntities =
                 rootEntityType.Assembly.GetTypes()
