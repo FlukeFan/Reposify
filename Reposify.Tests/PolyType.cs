@@ -21,5 +21,6 @@ namespace Reposify.Tests
         public virtual int?         NullableInt         { get; protected set; }
         public virtual DateTime?    NullableDateTime    { get; protected set; }
         public virtual Values?      NullableEnum        { get; protected set; }
+        public virtual PolyType     SubType             { get; protected set; }
     }
 }

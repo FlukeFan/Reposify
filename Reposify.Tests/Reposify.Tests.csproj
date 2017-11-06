@@ -60,6 +60,7 @@
     <Compile Include="DesignContraintsTests.cs" />
     <Compile Include="IRepositoryTests.cs" />
     <Compile Include="NugetPackage.cs" />
+    <Compile Include="Testing\CheckSaveLoadTests.cs" />
     <Compile Include="Testing\DesignConstraintsTests.cs" />
     <Compile Include="TestsBuilderExtensions.cs" />
     <Compile Include="TestsEntity.cs" />

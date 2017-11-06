@@ -48,6 +48,7 @@
     <Compile Include="ConstraintChecker.cs" />
     <Compile Include="CustomChecks.cs" />
     <Compile Include="MemoryRepository.cs" />
+    <Compile Include="CheckSaveLoad.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Reposify.Testing.nuspec" />

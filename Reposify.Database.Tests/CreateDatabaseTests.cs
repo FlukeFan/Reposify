@@ -33,6 +33,7 @@ namespace Reposify.Database.Tests
                 [NullableInt]       [int]               NULL,
                 [NullableDateTime]  [datetime]          NULL,
                 [NullableEnum]      [int]               NULL,
+                [SubType]           [int]               NULL,
              CONSTRAINT [PK_PolyType_Id] PRIMARY KEY CLUSTERED
             (
                 [Id] ASC
