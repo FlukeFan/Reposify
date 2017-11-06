@@ -9,7 +9,7 @@ namespace Reposify.Tests.Testing
     {
         protected override IRepository<int> New()
         {
-            return new MemoryRepository<int>(new ConsistencyInspector());
+            return new MemoryRepository<int>(new ConstraintChecker());
         }
 
         [Test]
@@ -21,7 +21,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void ShouldContain()
         {
-            var repository = new MemoryRepository<int>(new ConsistencyInspector());
+            var repository = new MemoryRepository<int>(new ConstraintChecker());
             var entity = new PolyTypeBuilder().Value();
 
             repository.Save(entity);
@@ -33,7 +33,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void ShouldContain_Throws()
         {
-            var repository = new MemoryRepository<int>(new ConsistencyInspector());
+            var repository = new MemoryRepository<int>(new ConstraintChecker());
 
             Assert.Throws<Exception>(() => repository.ShouldContain(null)).Message.Should().Contain("should not be null");
             Assert.Throws<Exception>(() => repository.ShouldContain(new PolyTypeBuilder().Value())).Message.Should().Contain("has an unsaved Id value");

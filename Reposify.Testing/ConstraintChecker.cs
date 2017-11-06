@@ -4,15 +4,15 @@ using System.Reflection;
 
 namespace Reposify.Testing
 {
-    public class ConsistencyInspector
+    public class ConstraintChecker
     {
         public static readonly DateTime MinSqlServerDateTime = new DateTime(1753, 1, 1, 0, 0, 0);
 
         private bool _isMsSql;
 
-        public ConsistencyInspector() : this(true) { }
+        public ConstraintChecker() : this(true) { }
 
-        public ConsistencyInspector(bool isMsSql)
+        public ConstraintChecker(bool isMsSql)
         {
             _isMsSql = isMsSql;
         }

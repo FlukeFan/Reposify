@@ -7,14 +7,14 @@ namespace Reposify.Testing
 {
     public class MemoryRepository<TId> : IRepository<TId>
     {
-        private ConsistencyInspector    _consistencyInspector;
+        private ConstraintChecker       _constraintChecker;
         private IList<IEntity<TId>>     _entities = new List<IEntity<TId>>();
 
         private int lastId = 101;
 
-        public MemoryRepository(ConsistencyInspector consistencyInspector)
+        public MemoryRepository(ConstraintChecker constraintChecker)
         {
-            _consistencyInspector = consistencyInspector;
+            _constraintChecker = constraintChecker;
         }
 
         public T Save<T>(T entity) where T : IEntity<TId>
@@ -22,8 +22,8 @@ namespace Reposify.Testing
             if (entity == null)
                 throw new Exception("Entity to be saved should not be null");
 
-            _consistencyInspector.BeforeSave(entity);
-            CustomInspections.Inspect(entity, _consistencyInspector);
+            _constraintChecker.BeforeSave(entity);
+            CustomChecks.Check(entity, _constraintChecker);
             var idProperty = entity.GetType().GetProperty("Id");
             idProperty.SetValue(entity, lastId++);
             _entities.Add(entity);

@@ -45,8 +45,8 @@
   <ItemGroup>
     <Compile Include="..\_output\AssemblyInfo.cs" />
     <Compile Include="Builder.cs" />
-    <Compile Include="ConsistencyInspector.cs" />
-    <Compile Include="CustomInspections.cs" />
+    <Compile Include="ConstraintChecker.cs" />
+    <Compile Include="CustomChecks.cs" />
     <Compile Include="MemoryRepository.cs" />
   </ItemGroup>
   <ItemGroup>

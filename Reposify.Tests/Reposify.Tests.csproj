@@ -67,8 +67,8 @@
     <Compile Include="PolyTypeBuilder.cs" />
     <Compile Include="Queries\WhereTests.cs" />
     <Compile Include="Testing\BuilderTests.cs" />
-    <Compile Include="Testing\ConsistencyInspectorTests.cs" />
-    <Compile Include="Testing\CustomInspectionsTests.cs" />
+    <Compile Include="Testing\CustomCheckerTests.cs" />
+    <Compile Include="Testing\CustomChecksTests.cs" />
     <Compile Include="Testing\MemoryRepositoryTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

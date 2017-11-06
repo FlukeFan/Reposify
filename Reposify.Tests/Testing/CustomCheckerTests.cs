@@ -6,7 +6,7 @@ using Reposify.Testing;
 namespace Reposify.Tests.Testing
 {
     [TestFixture]
-    public class ConsistencyInspectorTests
+    public class CustomCheckerTests
     {
         public class FakeEntity
         {
@@ -19,7 +19,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void WhenMsSql_DateTimeIsValidated()
         {
-            var inspector = new ConsistencyInspector();
+            var inspector = new ConstraintChecker();
 
             Assert.Throws<Exception>(() => inspector.BeforeSave(new FakeEntity { DateTime = DateTime.MinValue }));
 
@@ -30,7 +30,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void WhenNotMsSql_DateTimeIsIgnored()
         {
-            var inspector = new ConsistencyInspector(isMsSql: false);
+            var inspector = new ConstraintChecker(isMsSql: false);
 
             Assert.DoesNotThrow(() => inspector.BeforeSave(new FakeEntity { DateTime = DateTime.MinValue }));
             Assert.DoesNotThrow(() => inspector.BeforeSave(new FakeEntity { DateTime = new DateTime(2008, 07, 06) }));
@@ -40,7 +40,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void Check_AllPropertiesValid()
         {
-            var inspector = new ConsistencyInspector();
+            var inspector = new ConstraintChecker();
             var entity = new FakeEntity
             {
                 Object = new object(),
@@ -60,7 +60,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void Check_ThrowsWithPropertyName()
         {
-            var inspector = new ConsistencyInspector();
+            var inspector = new ConstraintChecker();
             var entity = new FakeEntity { String = null };
 
             var e = Assert.Throws<Exception>(() => inspector.Check(() => entity.String, s => { throw new Exception("was not null"); }));
@@ -71,7 +71,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void CheckNotNullObject_ThrowsWhenNull()
         {
-            var inspector = new ConsistencyInspector();
+            var inspector = new ConstraintChecker();
             var entity = new FakeEntity { Object = null };
 
             var e = Assert.Throws<Exception>(() => inspector.CheckNotNull(() => entity.Object));
@@ -82,7 +82,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void CheckNotNullValue_ThrowsWhenNull()
         {
-            var inspector = new ConsistencyInspector();
+            var inspector = new ConstraintChecker();
             var entity = new FakeEntity { NullableDateTime = null };
 
             var e = Assert.Throws<Exception>(() => inspector.CheckNotNull(() => entity.NullableDateTime));
@@ -93,7 +93,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void CheckNotNullOrEmpty_Throws()
         {
-            var inspector = new ConsistencyInspector();
+            var inspector = new ConstraintChecker();
             var entity = new FakeEntity { String = null };
 
             var e = Assert.Throws<Exception>(() => inspector.CheckNotNullOrEmpty(() => entity.String));
@@ -104,7 +104,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void CheckNotNullOrEmpty_ThrowsWhenEmpty()
         {
-            var inspector = new ConsistencyInspector();
+            var inspector = new ConstraintChecker();
             var entity = new FakeEntity { String = "" };
 
             var e = Assert.Throws<Exception>(() => inspector.CheckNotNullOrEmpty(() => entity.String));
@@ -115,7 +115,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void CheckMaxLength_ThrowsWhenTooLarge()
         {
-            var inspector = new ConsistencyInspector();
+            var inspector = new ConstraintChecker();
             var entity = new FakeEntity { String = "7 chars" };
 
             var e = Assert.Throws<Exception>(() => inspector.CheckMaxLength(() => entity.String, 6));
