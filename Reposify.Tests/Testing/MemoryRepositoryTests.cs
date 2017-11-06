@@ -31,6 +31,18 @@ namespace Reposify.Tests.Testing
         }
 
         [Test]
+        public void All_IsShortcutForQueryList()
+        {
+            var repository = new MemoryRepository<int>(new ConstraintChecker());
+
+            repository.Save(new PolyTypeBuilder().Value());
+            repository.Save(new PolyTypeBuilder().Value());
+            repository.Save(new PolyTypeBuilder().Value());
+
+            repository.All<PolyType>().Should().HaveCount(3);
+        }
+
+        [Test]
         public void ShouldContain_Throws()
         {
             var repository = new MemoryRepository<int>(new ConstraintChecker());

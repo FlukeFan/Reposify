@@ -43,6 +43,11 @@ namespace Reposify.Testing
             // no externally visible behaviour to implement
         }
 
+        public IList<T> All<T>() where T : IEntity<TId>
+        {
+            return Query<T>().List();
+        }
+
         public Query<T, TId> Query<T>() where T : IEntity<TId>
         {
             return new Query<T, TId>(this);
