@@ -38,6 +38,11 @@ namespace Reposify.Testing
                 .SingleOrDefault();
         }
 
+        public virtual void Delete<T>(T entity) where T : IEntity<TId>
+        {
+            _entities.Remove(entity);
+        }
+
         public virtual void Flush()
         {
             // no externally visible behaviour to implement

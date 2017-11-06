@@ -7,6 +7,7 @@ namespace Reposify
     {
         T               Save<T>(T entity)               where T : IEntity<TId>;
         T               Load<T>(TId id)                 where T : IEntity<TId>;
+        void            Delete<T>(T entity)             where T : IEntity<TId>;
         void            Flush();
 
         Query<T, TId>   Query<T>()                      where T : IEntity<TId>;

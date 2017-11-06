@@ -57,6 +57,11 @@ namespace Reposify.NHibernate
             return _session.Load<T>(id);
         }
 
+        public virtual void Delete<T>(T entity) where T : IEntity<TId>
+        {
+            _session.Delete(entity);
+        }
+
         public virtual void Flush()
         {
             _session.Flush();

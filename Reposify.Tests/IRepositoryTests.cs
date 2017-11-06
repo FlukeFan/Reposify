@@ -77,6 +77,21 @@ namespace Reposify.Tests
         }
 
         [Test]
+        public virtual void Delete_RemovesEntity()
+        {
+            var poly1 = new PolyTypeBuilder().Save(_repository);
+            var poly2 = new PolyTypeBuilder().Save(_repository);
+
+            _repository.Delete(poly1);
+
+            var allSaved = _repository.Query<PolyType>().List();
+
+            allSaved.Count.Should().Be(1, "poly2 should have been deleted from the repository");
+            allSaved[0].Id.Should().NotBe(poly1.Id);
+            allSaved[0].Id.Should().Be(poly2.Id);
+        }
+
+        [Test]
         public virtual void Query_RestrictStringPropertyEqual()
         {
             var poly1 = new PolyTypeBuilder().With(u => u.String, "test1@user.net").Save(_repository);
