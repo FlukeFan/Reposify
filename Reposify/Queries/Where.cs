@@ -38,6 +38,10 @@ namespace Reposify.Queries
             {
                 case ExpressionUtil.ExpressionTypes.BinaryExpression:
                     return ForBinaryExpression((BinaryExpression)restriction);
+                case ExpressionUtil.ExpressionTypes.MemberExpression:
+                    return ForUnaryExpression((MemberExpression)restriction);
+                case ExpressionUtil.ExpressionTypes.UnaryExpression:
+                    return ForUnaryExpression((UnaryExpression)restriction);
                 default:
                     throw ExpressionUtil.NewException("Unable to form query for: ", restriction);
             }
@@ -48,6 +52,21 @@ namespace Reposify.Queries
             var operand1 = ExpressionUtil.FindMemberInfo(binaryExpression.Left);
             var operand2 = ExpressionUtil.FindValue(binaryExpression.Right);
             return new WhereBinaryComparison(binaryExpression, operand1, binaryExpression.NodeType, operand2);
+        }
+
+        private static Where ForUnaryExpression(MemberExpression memberExpression)
+        {
+            var operand = memberExpression.Member;
+            return new WhereBinaryComparison(memberExpression, operand, ExpressionType.Equal, true);
+        }
+
+        private static Where ForUnaryExpression(UnaryExpression unaryExpression)
+        {
+            if (unaryExpression.NodeType != ExpressionType.Not)
+                throw ExpressionUtil.NewException("unrecognised unary type " + unaryExpression.NodeType, unaryExpression);
+
+            var operand = ExpressionUtil.FindMemberInfo(unaryExpression.Operand);
+            return new WhereBinaryComparison(unaryExpression, operand, ExpressionType.NotEqual, true);
         }
     }
 }

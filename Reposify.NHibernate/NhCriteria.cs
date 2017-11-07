@@ -26,6 +26,7 @@ namespace Reposify.NHibernate
             { WhereBinaryComparison.OperatorType.LessThan,              (prop, val) => Restrictions.Lt(prop, val) },
             { WhereBinaryComparison.OperatorType.LessThanOrEqual,       (prop, val) => Restrictions.Le(prop, val) },
             { WhereBinaryComparison.OperatorType.Equal,                 (prop, val) => Restrictions.Eq(prop, val) },
+            { WhereBinaryComparison.OperatorType.NotEqual,              (prop, val) => Restrictions.Not(Restrictions.Eq(prop, val)) },
             { WhereBinaryComparison.OperatorType.GreaterThanOrEqual,    (prop, val) => Restrictions.Ge(prop, val) },
             { WhereBinaryComparison.OperatorType.GreaterThan,           (prop, val) => Restrictions.Gt(prop, val) },
         };

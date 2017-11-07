@@ -11,6 +11,7 @@ namespace Reposify.Queries
             Unrecognised,
             BinaryExpression,
             MemberExpression,
+            UnaryExpression,
         };
 
         public static MemberInfo FindMemberInfo(Expression expression)
@@ -35,6 +36,8 @@ namespace Reposify.Queries
                 return ExpressionTypes.BinaryExpression;
             else if (expression is MemberExpression)
                 return ExpressionTypes.MemberExpression;
+            else if (expression is UnaryExpression)
+                return ExpressionTypes.UnaryExpression;
             else
                 return ExpressionTypes.Unrecognised;
         }
