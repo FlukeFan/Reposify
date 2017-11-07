@@ -15,6 +15,7 @@ namespace Reposify.Tests
             With(u => u.Boolean, true);
             With(u => u.DateTime, DefaultDateTimeValue);
             With(u => u.Enum, PolyType.Values.Val2);
+            With(u => u.NullableString, "not null string value");
             With(u => u.NullableInt, 20);
             With(u => u.NullableBoolean, true);
             With(u => u.NullableEnum, PolyType.Values.Val3);

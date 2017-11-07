@@ -31,6 +31,7 @@ namespace Reposify.Database.Tests
                 [Boolean]           [bit]               NOT NULL,
                 [DateTime]          [datetime]          NOT NULL,
                 [Enum]              [int]               NOT NULL,
+                [NullableString]    [varchar](255)      NULL,
                 [NullableInt]       [int]               NULL,
                 [NullableBoolean]   [bit]               NULL,
                 [NullableDateTime]  [datetime]          NULL,

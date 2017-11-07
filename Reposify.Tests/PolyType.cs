@@ -19,6 +19,7 @@ namespace Reposify.Tests
         public virtual bool         Boolean             { get; protected set; }
         public virtual DateTime     DateTime            { get; protected set; }
         public virtual Values       Enum                { get; protected set; }
+        public virtual string       NullableString      { get; protected set; }
         public virtual int?         NullableInt         { get; protected set; }
         public virtual bool?        NullableBoolean     { get; protected set; }
         public virtual DateTime?    NullableDateTime    { get; protected set; }

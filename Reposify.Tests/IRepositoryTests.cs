@@ -198,6 +198,32 @@ namespace Reposify.Tests
         }
 
         [Test]
+        public virtual void Query_RestrictNull()
+        {
+            var poly1 = new PolyTypeBuilder().With(u => u.NullableString, "not null").With(u => u.NullableInt, 5   ).Save(_repository);
+            var poly2 = new PolyTypeBuilder().With(u => u.NullableString, null      ).With(u => u.NullableInt, 5   ).Save(_repository);
+            var poly3 = new PolyTypeBuilder().With(u => u.NullableString, "not null").With(u => u.NullableInt, 5   ).Save(_repository);
+            var poly4 = new PolyTypeBuilder().With(u => u.NullableString, "not null").With(u => u.NullableInt, null).Save(_repository);
+
+            {
+                var result = _repository.Query<PolyType>().Filter(e => e.NullableString == null).List();
+                result.Select(e => e.Id).Should().BeEquivalentTo(poly2.Id);
+            }
+            {
+                var result = _repository.Query<PolyType>().Filter(e => e.NullableString != null).List();
+                result.Select(e => e.Id).Should().BeEquivalentTo(poly1.Id, poly3.Id, poly4.Id);
+            }
+            {
+                var result = _repository.Query<PolyType>().Filter(e => e.NullableInt == null).List();
+                result.Select(e => e.Id).Should().BeEquivalentTo(poly4.Id);
+            }
+            {
+                var result = _repository.Query<PolyType>().Filter(e => e.NullableInt != null).List();
+                result.Select(e => e.Id).Should().BeEquivalentTo(poly1.Id, poly2.Id, poly3.Id);
+            }
+        }
+
+        [Test]
         public virtual void Query_Ordering()
         {
             var poly2 = new PolyTypeBuilder().With(u => u.Int, 2).Save(_repository);
