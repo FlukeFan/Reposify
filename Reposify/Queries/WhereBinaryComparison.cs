@@ -29,9 +29,13 @@ namespace Reposify.Queries
 
         public override Expression CreateExpression(ParameterExpression parameter)
         {
-            var left = Expression.PropertyOrField(parameter, Operand1.Name);
+            Expression left = Expression.PropertyOrField(parameter, Operand1.Name);
             var right = Expression.Constant(Operand2);
             var expressionType = FindExpressionType(Operator);
+
+            if (left.Type != right.Type)
+                left = Expression.Convert(left, right.Type);
+
             var comparison = Expression.MakeBinary(expressionType, left, right);
             return comparison;
         }

@@ -80,7 +80,14 @@ namespace Reposify.NHibernate
                 throw new Exception("Unhandled comparison operator: " + where.Operator);
 
             var criterionFunc = _binaryComparisons[where.Operator];
-            var criterion = criterionFunc(where.Operand1.Name, where.Operand2);
+
+            var propertyType = where.Operand1.GetUnderlyingType();
+
+            object operand2 = where.Operand2 != null && where.Operand2.GetType() != propertyType && propertyType.IsEnum
+                ? Enum.ToObject(propertyType, where.Operand2)
+                : where.Operand2;
+
+            var criterion = criterionFunc(where.Operand1.Name, operand2);
             criteria.Add(criterion);
         }
 

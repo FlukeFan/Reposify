@@ -173,6 +173,31 @@ namespace Reposify.Tests
         }
 
         [Test]
+        public virtual void Query_RestrictEnums()
+        {
+            var poly1 = new PolyTypeBuilder().With(u => u.Enum, PolyType.Values.Val1).Save(_repository);
+            var poly2 = new PolyTypeBuilder().With(u => u.Enum, PolyType.Values.Val2).Save(_repository);
+            var poly3 = new PolyTypeBuilder().With(u => u.Enum, PolyType.Values.Val3).Save(_repository);
+
+            {
+                var result = _repository.Query<PolyType>().Filter(e => e.Enum == PolyType.Values.Val2).List();
+                result.Select(e => e.Id).Should().BeEquivalentTo(poly2.Id);
+            }
+            {
+                var result = _repository.Query<PolyType>().Filter(e => e.Enum != PolyType.Values.Val2).List();
+                result.Select(e => e.Id).Should().BeEquivalentTo(poly1.Id, poly3.Id);
+            }
+            {
+                var result = _repository.Query<PolyType>().Filter(e => e.Enum > PolyType.Values.Val2).List();
+                result.Select(e => e.Id).Should().BeEquivalentTo(poly3.Id);
+            }
+            {
+                var result = _repository.Query<PolyType>().Filter(e => e.Enum >= PolyType.Values.Val2).List();
+                result.Select(e => e.Id).Should().BeEquivalentTo(poly2.Id, poly3.Id);
+            }
+        }
+
+        [Test]
         public virtual void Query_Ordering()
         {
             var poly2 = new PolyTypeBuilder().With(u => u.Int, 2).Save(_repository);
