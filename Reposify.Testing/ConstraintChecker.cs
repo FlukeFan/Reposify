@@ -32,6 +32,9 @@ namespace Reposify.Testing
 
             if (type == typeof(DateTime) && _isMsSql)
                 CheckMsSqlDateTime(property.Name, (DateTime)property.GetValue(entity));
+
+            if (type == typeof(DateTime?) && _isMsSql)
+                CheckNullableMsSqlDateTime(property.Name, (DateTime?)property.GetValue(entity));
         }
 
         public void Check<T>(Expression<Func<T>> property, Action<T> validate)
@@ -60,6 +63,17 @@ namespace Reposify.Testing
         public void CheckMsSqlDateTime(string propertyName, DateTime dateTime)
         {
             if (dateTime < MinSqlServerDateTime)
+                throw new Exception(string.Format("DateTime property {0} with value {1} cannot be stored in SQL Server", propertyName, dateTime));
+        }
+
+        public void CheckNullableMsSqlDateTime(Expression<Func<DateTime?>> property)
+        {
+            CheckNullableMsSqlDateTime(Builder.GetPropertyName(property.Body), property.Compile().Invoke());
+        }
+
+        public void CheckNullableMsSqlDateTime(string propertyName, DateTime? dateTime)
+        {
+            if (dateTime.HasValue && dateTime < MinSqlServerDateTime)
                 throw new Exception(string.Format("DateTime property {0} with value {1} cannot be stored in SQL Server", propertyName, dateTime));
         }
 

@@ -22,9 +22,12 @@ namespace Reposify.Tests.Testing
             var inspector = new ConstraintChecker();
 
             Assert.Throws<Exception>(() => inspector.BeforeSave(new FakeEntity { DateTime = DateTime.MinValue }));
+            Assert.Throws<Exception>(() => inspector.BeforeSave(new FakeEntity { DateTime = new DateTime(2008, 07, 06), NullableDateTime = DateTime.MinValue }));
 
             Assert.DoesNotThrow(() => inspector.BeforeSave(new FakeEntity { DateTime = new DateTime(2008, 07, 06) }));
             Assert.DoesNotThrow(() => inspector.BeforeSave(new FakeEntity { DateTime = DateTime.MaxValue }));
+            Assert.DoesNotThrow(() => inspector.BeforeSave(new FakeEntity { DateTime = new DateTime(2008, 07, 06), NullableDateTime = new DateTime(2008, 07, 06) }));
+            Assert.DoesNotThrow(() => inspector.BeforeSave(new FakeEntity { DateTime = new DateTime(2008, 07, 06), NullableDateTime = DateTime.MaxValue }));
         }
 
         [Test]
