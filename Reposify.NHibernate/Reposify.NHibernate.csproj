@@ -50,8 +50,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\_output\AssemblyInfo.cs" />
+    <Compile Include="INhQueryHandler.cs" />
+    <Compile Include="INhExecutionHandler.cs" />
     <Compile Include="NhHelper.cs" />
     <Compile Include="NhCriteria.cs" />
+    <Compile Include="NhHandlers.cs" />
     <Compile Include="NhRepository.cs" />
   </ItemGroup>
   <ItemGroup>

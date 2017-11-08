@@ -14,6 +14,8 @@ namespace Reposify.NHibernate.Tests
 {
     public class NhRepositoryTests : IRepositoryTests
     {
+        private static NhHandlers<int> _handlers;
+
         static NhRepositoryTests()
         {
             var environment = BuildEnvironment.Load();
@@ -38,13 +40,14 @@ namespace Reposify.NHibernate.Tests
             });
 
             NhRepository<int>.Init(config);
+            _handlers = new NhHandlers<int>().UsingHandlersFromAssemblyForType<NhRepositoryTests>();
         }
 
         private NhRepository<int> _repository;
 
         protected override IRepository<int> New()
         {
-            _repository = new NhRepository<int>().Open();
+            _repository = new NhRepository<int>().UsingHandlers(_handlers).Open();
             return _repository;
         }
 

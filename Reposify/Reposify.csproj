@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="..\_output\AssemblyInfo.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="IDbExecution.cs" />
+    <Compile Include="IDbQuery.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IIdentityMapRepository.cs" />
     <Compile Include="IRepository.cs" />

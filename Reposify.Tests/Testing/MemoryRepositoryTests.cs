@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using Reposify.Testing;
@@ -7,15 +9,35 @@ namespace Reposify.Tests.Testing
 {
     public class MemoryRepositoryTests : IRepositoryTests
     {
+        private MemoryRepository<int> _repository;
+
         protected override IRepository<int> New()
         {
-            return new MemoryRepository<int>(new ConstraintChecker());
+            _repository = new MemoryRepository<int>(new ConstraintChecker());
+            return _repository;
         }
 
         [Test]
         public virtual void Flush_DoesNotThrow()
         {
             New().Flush();
+        }
+
+        [Test]
+        public override void DbQuery_IsImplemented()
+        {
+            _repository.SetHandler<QuerySaveEntities>(q =>
+            {
+                foreach (var e in q.EntitiesToSave)
+                    _repository.Save(e);
+            });
+
+            _repository.SetHandler<QueryIn, IList<PolyType>>(q =>
+                _repository.Query<PolyType>().List()
+                    .Where(p => q.IntValues.Contains(p.Id))
+                    .ToList());
+
+            base.DbQuery_IsImplemented();
         }
 
         [Test]

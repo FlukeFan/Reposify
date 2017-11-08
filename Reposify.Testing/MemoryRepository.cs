@@ -7,14 +7,53 @@ namespace Reposify.Testing
 {
     public class MemoryRepository<TId> : IRepository<TId>
     {
-        private ConstraintChecker       _constraintChecker;
-        private IList<IEntity<TId>>     _entities = new List<IEntity<TId>>();
+        protected IDictionary<Type, Action<object>>         _executionHandlers  = new Dictionary<Type, Action<object>>();
+        protected IDictionary<Type, Func<object, object>>   _queryHandlers      = new Dictionary<Type, Func<object, object>>();
 
-        private int lastId = 101;
+        protected ConstraintChecker                         _constraintChecker;
+        protected IList<IEntity<TId>>                       _entities           = new List<IEntity<TId>>();
+
+        protected int lastId = 101;
 
         public MemoryRepository(ConstraintChecker constraintChecker)
         {
             _constraintChecker = constraintChecker;
+        }
+
+        public virtual void SetHandler<T>(Action<T> handler) where T : IDbExecution
+        {
+            _executionHandlers[typeof(T)] = q => handler((T)q);
+        }
+
+        public virtual void SetHandler<TQuery, TResult>(Func<TQuery, TResult> handler) where TQuery : IDbQuery<TResult>
+        {
+            _queryHandlers[typeof(TQuery)] = q => handler((TQuery)q);
+        }
+
+        public virtual void Execute(IDbExecution dbExecution)
+        {
+            if (dbExecution == null)
+                throw new Exception("attempt to execute null query");
+
+            var type = dbExecution.GetType();
+
+            if (!_executionHandlers.ContainsKey(type))
+                throw new Exception($"no handler has been set for {type} - use SetHandler<T>() to set a handler");
+
+            _executionHandlers[type](dbExecution);
+        }
+
+        public virtual T Execute<T>(IDbQuery<T> dbQuery)
+        {
+            if (dbQuery == null)
+                throw new Exception("attempt to execute null query");
+
+            var type = dbQuery.GetType();
+
+            if (!_queryHandlers.ContainsKey(type))
+                throw new Exception($"no handler has been set for {type} - use SetHandler<T>() to set a handler");
+
+            return (T)_queryHandlers[type](dbQuery);
         }
 
         public virtual T Save<T>(T entity) where T : IEntity<TId>

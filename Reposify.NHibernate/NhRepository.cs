@@ -20,20 +20,18 @@ namespace Reposify.NHibernate
             Init(configuration.BuildSessionFactory());
         }
 
-        private ISession        _session;
-        private ITransaction    _transaction;
-
-        public NhRepository()
-        {
-            if (SessionFactory == null)
-                throw new Exception("Call Init() once to setup the session factory");
-        }
+        protected ISession          _session;
+        protected ITransaction      _transaction;
+        protected NhHandlers<TId>   _handlers       = new NhHandlers<TId>();
 
         public ISession     Session     { get { return _session; } }
         public ITransaction Transaction { get { return _transaction; } }
 
         public virtual NhRepository<TId> Open()
         {
+            if (SessionFactory == null)
+                throw new Exception("Call Init() once to setup the session factory");
+
             _session = SessionFactory.OpenSession();
             _transaction = _session.BeginTransaction();
             return this;
@@ -44,6 +42,22 @@ namespace Reposify.NHibernate
             _transaction.Commit();
             _transaction = null;
             _session = null;
+        }
+
+        public NhRepository<TId> UsingHandlers(NhHandlers<TId> handlers)
+        {
+            _handlers = handlers;
+            return this;
+        }
+
+        public void Execute(IDbExecution dbExecution)
+        {
+            _handlers.Execute(this, dbExecution);
+        }
+
+        public T Execute<T>(IDbQuery<T> dbQuery)
+        {
+            return _handlers.Execute(this, dbQuery);
         }
 
         public virtual T Save<T>(T entity) where T : IEntity<TId>
