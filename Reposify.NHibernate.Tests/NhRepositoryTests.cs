@@ -104,6 +104,19 @@ namespace Reposify.NHibernate.Tests
             loaded.Should().NotBeSameAs(poly);
         }
 
+        [Test]
+        public void CheckSaveLoad()
+        {
+            var repository = New();
+            var subType = new PolyTypeBuilder().Save(repository);
+
+            var entity = new PolyTypeBuilder()
+                .With(e => e.SubType, subType)
+                .Value();
+
+            entity.CheckSaveLoad(repository).Check();
+        }
+
         private string GetUnderlyingDbValue(int id)
         {
             var sql = "SELECT [String] FROM [PolyType] WHERE [Id] = :id";
