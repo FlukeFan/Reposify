@@ -3,7 +3,7 @@
 
   <PropertyGroup>
 
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
     <CoverageTarget Condition="'$(CoverageTarget)'==''">90</CoverageTarget>
 
     <NuGetExe>$(MSBuildThisFileDirectory)\..\packages\NuGet.CommandLine.4.3.0\tools\NuGet.exe</NuGetExe>
