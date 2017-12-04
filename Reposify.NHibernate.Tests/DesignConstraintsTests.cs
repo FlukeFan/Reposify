@@ -12,11 +12,16 @@ namespace Reposify.NHibernate.Tests
             var folder = @"..\..\..\_output";
             var name = "Reposify.NHibernate";
 
-            NugetPackage.VerifyDependencies(folder, name, new string[]
-            {
-                "Reposify:*",
-                "NHibernate:4.0.0.4000",
-            });
+            NugetPackage.Find(folder, name)
+                .VerifyDependencies(new string[]
+                {
+                    "Reposify:*",
+                    "NHibernate:4.0.0.4000",
+                })
+                .VerifyProjectDependencies(@"..\..\..\Reposify.NHibernate\Reposify.NHibernate.csproj", new string[]
+                {
+                    "NHibernate:4.0.0.4000",
+                });
         }
     }
 }
