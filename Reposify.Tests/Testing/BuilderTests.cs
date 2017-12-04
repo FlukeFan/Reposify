@@ -31,7 +31,12 @@ namespace Reposify.Tests.Testing
 
         public class Mixed
         {
+            private string _privateField;
+
             public string StringValue { get; protected set; }
+
+            public string PrivateField() { return _privateField; }
+            public void PrivateField(string value) { _privateField = value; }
         }
 
         public class MixedBuilder : Builder<Mixed>
@@ -116,6 +121,19 @@ namespace Reposify.Tests.Testing
             Builder.Modify(obj).With(p => p.StringValue, "after");
 
             obj.StringValue.Should().Be("after");
+        }
+
+        [Test]
+        public void CanSetPrivateFields()
+        {
+            var mixed = new MixedBuilder()
+                .WithField("_privateField", "private value")
+                .Value();
+
+            mixed.PrivateField().Should().Be("private value");
+
+            mixed.PrivateField("changed");
+            Builder.GetField(mixed, "_privateField").Should().Be("changed");
         }
     }
 }

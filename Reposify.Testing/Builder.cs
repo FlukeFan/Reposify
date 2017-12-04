@@ -55,6 +55,19 @@ namespace Reposify.Testing
         {
             return GetPropertyInfo(body).Name;
         }
+
+        public static void SetField(object instance, string fieldName, object value)
+        {
+            var field = instance.GetType().GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+            field.SetValue(instance, value);
+        }
+
+        public static object GetField(object instance, string fieldName)
+        {
+            var field = instance.GetType().GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+            var value = field.GetValue(instance);
+            return value;
+        }
     }
 
     public class Builder<T> : Builder
@@ -84,6 +97,12 @@ namespace Reposify.Testing
                 throw new System.Exception("Property '" + propertyInfo.Name + "' does not have a mutator on " + _instance.GetType());
 
             propertyInfo.SetValue(_instance, value, null);
+            return this;
+        }
+
+        public Builder<T> WithField(string fieldName, object value)
+        {
+            SetField(_instance, fieldName, value);
             return this;
         }
 
