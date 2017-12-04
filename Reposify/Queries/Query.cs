@@ -28,9 +28,15 @@ namespace Reposify.Queries
             return this;
         }
 
-        public Query<T, TId> OrderBy<TKey>(Expression<Func<T, TKey>> property, Direction direction)
+        public Query<T, TId> OrderBy<TKey>(Expression<Func<T, TKey>> property)
         {
-            _orders.Add(Ordering.For(property, direction));
+            _orders.Add(Ordering.For(property, Direction.Ascending));
+            return this;
+        }
+
+        public Query<T, TId> OrderByDescending<TKey>(Expression<Func<T, TKey>> property)
+        {
+            _orders.Add(Ordering.For(property, Direction.Descending));
             return this;
         }
 

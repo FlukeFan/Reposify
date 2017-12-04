@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using Reposify.Queries;
 
 namespace Reposify.Tests
 {
@@ -247,11 +246,11 @@ namespace Reposify.Tests
             var poly3 = new PolyTypeBuilder().With(u => u.Int, 3).Save(_repository);
 
             {
-                var result = _repository.Query<PolyType>().OrderBy(e => e.Int, Direction.Ascending).List();
+                var result = _repository.Query<PolyType>().OrderBy(e => e.Int).List();
                 result.Select(e => e.Int).Should().BeInAscendingOrder(e => e);
             }
             {
-                var result = _repository.Query<PolyType>().OrderBy(e => e.Int, Direction.Descending).List();
+                var result = _repository.Query<PolyType>().OrderByDescending(e => e.Int).List();
                 result.Select(e => e.Int).Should().BeInDescendingOrder(e => e);
             }
         }
@@ -265,7 +264,7 @@ namespace Reposify.Tests
             var poly4 = new PolyTypeBuilder().With(u => u.Int, 4).Save(_repository);
 
             var result = _repository.Query<PolyType>()
-                .OrderBy(e => e.Int, Direction.Ascending)
+                .OrderBy(e => e.Int)
                 .Skip(1)
                 .Take(2)
                 .List();
