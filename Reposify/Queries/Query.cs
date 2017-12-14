@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Reposify.Queries
 {
-    public class Query<T, TId> where T : IEntity<TId>
+    public class Query<T, TId> where T : class, IEntity<TId>
     {
         private IRepository<TId>    _repository;
         private IList<Where>        _restrictions   = new List<Where>();

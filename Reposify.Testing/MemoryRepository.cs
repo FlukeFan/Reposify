@@ -56,7 +56,7 @@ namespace Reposify.Testing
             return (T)_queryHandlers[type](dbQuery);
         }
 
-        public virtual T Save<T>(T entity) where T : IEntity<TId>
+        public virtual T Save<T>(T entity) where T : class, IEntity<TId>
         {
             if (entity == null)
                 throw new Exception("Entity to be saved should not be null");
@@ -69,7 +69,7 @@ namespace Reposify.Testing
             return entity;
         }
 
-        public virtual T Load<T>(TId id) where T : IEntity<TId>
+        public virtual T Load<T>(TId id) where T : class, IEntity<TId>
         {
             return _entities
                 .Where(e => e.Id.Equals(id))
@@ -77,7 +77,7 @@ namespace Reposify.Testing
                 .SingleOrDefault();
         }
 
-        public virtual void Delete<T>(T entity) where T : IEntity<TId>
+        public virtual void Delete<T>(T entity) where T : class, IEntity<TId>
         {
             _entities.Remove(entity);
         }
@@ -87,17 +87,17 @@ namespace Reposify.Testing
             // no externally visible behaviour to implement
         }
 
-        public IList<T> All<T>() where T : IEntity<TId>
+        public IList<T> All<T>() where T : class, IEntity<TId>
         {
             return Query<T>().List();
         }
 
-        public virtual Query<T, TId> Query<T>() where T : IEntity<TId>
+        public virtual Query<T, TId> Query<T>() where T : class, IEntity<TId>
         {
             return new Query<T, TId>(this);
         }
 
-        public virtual IList<T> Satisfy<T>(Query<T, TId> query) where T : IEntity<TId>
+        public virtual IList<T> Satisfy<T>(Query<T, TId> query) where T : class, IEntity<TId>
         {
             var entities = _entities.Where(e => typeof(T).IsAssignableFrom(e.GetType())).Cast<T>();
 
@@ -148,6 +148,10 @@ namespace Reposify.Testing
             var processor = Ordering.Lambda<T>(order).Compile();
             entities = processor(entities);
             return entities;
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

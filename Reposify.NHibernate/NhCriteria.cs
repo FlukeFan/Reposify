@@ -8,13 +8,13 @@ namespace Reposify.NHibernate
 {
     public static class NhCriteria
     {
-        public static NhCriteria<T, TId> For<T, TId>(Query<T, TId> query) where T : IEntity<TId>
+        public static NhCriteria<T, TId> For<T, TId>(Query<T, TId> query) where T : class, IEntity<TId>
         {
             return new NhCriteria<T, TId>(query);
         }
     }
 
-    public class NhCriteria<T, TId> where T : IEntity<TId>
+    public class NhCriteria<T, TId> where T : class, IEntity<TId>
     {
         private static IDictionary<Type, Action<ICriteria, Where>> _restrictionProcessors = new Dictionary<Type, Action<ICriteria, Where>>
         {

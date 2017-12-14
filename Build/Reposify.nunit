@@ -4,5 +4,6 @@
     <assembly path="..\Reposify.Database.Tests\bin\Debug\Reposify.Database.Tests.dll" />
     <assembly path="..\Reposify.Tests\bin\Debug\Reposify.Tests.dll" />
     <assembly path="..\Reposify.NHibernate.Tests\bin\Debug\Reposify.NHibernate.Tests.dll" />
+    <assembly path="..\Reposify.Ef6.Tests\bin\Debug\Reposify.Ef6.Tests.dll" />
   </Config>
 </NUnitProject>

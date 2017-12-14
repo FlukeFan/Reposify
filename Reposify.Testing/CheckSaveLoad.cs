@@ -8,24 +8,24 @@ namespace Reposify.Testing
 {
     public static class CheckSaveLoadExtensions
     {
-        public static CheckSaveLoad<TEntity, TId> CheckSaveLoad<TId, TEntity>(this IRepository<TId> repository, TEntity entity) where TEntity : IEntity<TId>
+        public static CheckSaveLoad<TEntity, TId> CheckSaveLoad<TId, TEntity>(this IRepository<TId> repository, TEntity entity) where TEntity : class, IEntity<TId>
         {
             return new CheckSaveLoad<TEntity, TId>(entity, repository);
         }
 
-        public static CheckSaveLoad<TEntity, TId> CheckSaveLoad<TEntity, TId>(this TEntity entity, IRepository<TId> repository) where TEntity : IEntity<TId>
+        public static CheckSaveLoad<TEntity, TId> CheckSaveLoad<TEntity, TId>(this TEntity entity, IRepository<TId> repository) where TEntity : class, IEntity<TId>
         {
             return new CheckSaveLoad<TEntity, TId>(entity, repository);
         }
 
-        public static CheckSaveLoad<TEntity, TId> ExcludeProperties<TEntity, TId>(this CheckSaveLoad<TEntity, TId> checkSaveLoad, params string[] excludedProperties) where TEntity : IEntity<TId>
+        public static CheckSaveLoad<TEntity, TId> ExcludeProperties<TEntity, TId>(this CheckSaveLoad<TEntity, TId> checkSaveLoad, params string[] excludedProperties) where TEntity : class, IEntity<TId>
         {
             checkSaveLoad.SetExcludedProperties(excludedProperties);
             return checkSaveLoad;
         }
     }
 
-    public class CheckSaveLoad<TEntity, TId> : CheckSaveLoad where TEntity : IEntity<TId>
+    public class CheckSaveLoad<TEntity, TId> : CheckSaveLoad where TEntity : class, IEntity<TId>
     {
         private IRepository<TId>    _repository;
         private TEntity             _entity;

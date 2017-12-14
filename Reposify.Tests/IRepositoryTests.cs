@@ -20,7 +20,8 @@ namespace Reposify.Tests
         [TearDown]
         public virtual void TearDown()
         {
-            _repository = null;
+            using (_repository)
+                _repository = null;
         }
 
         [Test]
