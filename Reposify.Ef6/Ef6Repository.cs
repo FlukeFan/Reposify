@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using Reposify.Queries;
 
 namespace Reposify.Ef6
@@ -68,8 +69,27 @@ namespace Reposify.Ef6
 
         public virtual IList<T> Satisfy<T>(Query<T, TId> query) where T : class, IEntity<TId>
         {
-            var all = _dbContext.Set<T>().ToListAsync().GetAwaiter().GetResult();
-            return all;
+            var dbSet = (IEnumerable<T>)_dbContext.Set<T>();
+
+            foreach (var restriction in query.Restrictions)
+            {
+                var expression = Where.Lambda<T>(restriction).Compile();
+                dbSet = dbSet.Where(expression);
+            }
+
+            foreach (var order in query.Orders)
+            {
+                var processor = Ordering.Lambda<T>(order).Compile();
+                dbSet = processor(dbSet);
+            }
+
+            if (query.SkipCount.HasValue)
+                dbSet = dbSet.Skip(query.SkipCount.Value);
+
+            if (query.TakeCount.HasValue)
+                dbSet = dbSet.Take(query.TakeCount.Value);
+
+            return dbSet.ToList();
         }
 
         public virtual void Dispose()
