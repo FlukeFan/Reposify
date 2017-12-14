@@ -1,12 +1,10 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using NUnit.Framework;
 using Reposify.Database.Tests;
 using Reposify.Tests;
 
 namespace Reposify.Ef6.Tests
 {
-    [Explicit]
     public class Ef6RepositoryTests : IRepositoryTests
     {
         public class TestsDbContext : DbContext
@@ -25,16 +23,18 @@ namespace Reposify.Ef6.Tests
         }
 
         private static BuildEnvironment _environment;
+        private static Ef6Handlers<int> _handlers;
 
         static Ef6RepositoryTests()
         {
             _environment = BuildEnvironment.Load();
+            _handlers = new Ef6Handlers<int>().UsingHandlersFromAssemblyForType<Ef6RepositoryTests>();
         }
 
         protected override IRepository<int> New()
         {
             var dbContext = new TestsDbContext(_environment.Connection);
-            return new Ef6Repository<int>(dbContext).Open();
+            return new Ef6Repository<int>(dbContext).UsingHandlers(_handlers).Open();
         }
 
         public override void TearDown()

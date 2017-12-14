@@ -8,8 +8,12 @@ namespace Reposify.Ef6
 {
     public class Ef6Repository<TId> : IIdentityMapRepository<TId>, IDisposable
     {
-        private DbContext               _dbContext;
-        private DbContextTransaction    _transaction;
+        protected DbContext                 _dbContext;
+        protected DbContextTransaction      _transaction;
+        protected Ef6Handlers<TId>          _handlers = new Ef6Handlers<TId>();
+
+        public DbContext            DbContext   { get { return _dbContext; } }
+        public DbContextTransaction Transaction { get { return _transaction; } }
 
         public Ef6Repository(DbContext dbContext)
         {
@@ -27,13 +31,20 @@ namespace Reposify.Ef6
             _transaction.Commit();
         }
 
+        public Ef6Repository<TId> UsingHandlers(Ef6Handlers<TId> handlers)
+        {
+            _handlers = handlers;
+            return this;
+        }
+
         public void Execute(IDbExecution dbExecution)
         {
+            _handlers.Execute(this, dbExecution);
         }
 
         public T Execute<T>(IDbQuery<T> dbQuery)
         {
-            return default(T);
+            return _handlers.Execute(this, dbQuery);
         }
 
         public virtual T Save<T>(T entity) where T : class, IEntity<TId>

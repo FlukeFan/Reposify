@@ -52,6 +52,9 @@
   <ItemGroup>
     <Compile Include="..\_output\AssemblyInfo.cs" />
     <Compile Include="Ef6Repository.cs" />
+    <Compile Include="Ef6Handlers.cs" />
+    <Compile Include="IEf6ExecutionHandler.cs" />
+    <Compile Include="IEf6QueryHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
