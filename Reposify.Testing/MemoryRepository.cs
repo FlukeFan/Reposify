@@ -5,13 +5,13 @@ using Reposify.Queries;
 
 namespace Reposify.Testing
 {
-    public class MemoryRepository<TId> : IRepository<TId>
+    public class MemoryRepository : IRepository
     {
         protected IDictionary<Type, Action<object>>         _executionHandlers  = new Dictionary<Type, Action<object>>();
         protected IDictionary<Type, Func<object, object>>   _queryHandlers      = new Dictionary<Type, Func<object, object>>();
 
         protected ConstraintChecker                         _constraintChecker;
-        protected IList<IEntity<TId>>                       _entities           = new List<IEntity<TId>>();
+        protected IList<IEntity>                            _entities           = new List<IEntity>();
 
         protected int lastId = 101;
 
@@ -56,7 +56,7 @@ namespace Reposify.Testing
             return (T)_queryHandlers[type](dbQuery);
         }
 
-        public virtual T Save<T>(T entity) where T : class, IEntity<TId>
+        public virtual T Save<T>(T entity) where T : class, IEntity
         {
             if (entity == null)
                 throw new Exception("Entity to be saved should not be null");
@@ -69,7 +69,7 @@ namespace Reposify.Testing
             return entity;
         }
 
-        public virtual T Load<T>(TId id) where T : class, IEntity<TId>
+        public virtual T Load<T>(object id) where T : class, IEntity
         {
             return _entities
                 .Where(e => e.Id.Equals(id))
@@ -77,7 +77,7 @@ namespace Reposify.Testing
                 .SingleOrDefault();
         }
 
-        public virtual void Delete<T>(T entity) where T : class, IEntity<TId>
+        public virtual void Delete<T>(T entity) where T : class, IEntity
         {
             _entities.Remove(entity);
         }
@@ -87,17 +87,17 @@ namespace Reposify.Testing
             // no externally visible behaviour to implement
         }
 
-        public IList<T> All<T>() where T : class, IEntity<TId>
+        public IList<T> All<T>() where T : class, IEntity
         {
             return Query<T>().List();
         }
 
-        public virtual Query<T, TId> Query<T>() where T : class, IEntity<TId>
+        public virtual Query<T> Query<T>() where T : class, IEntity
         {
-            return new Query<T, TId>(this);
+            return new Query<T>(this);
         }
 
-        public virtual IList<T> Satisfy<T>(Query<T, TId> query) where T : class, IEntity<TId>
+        public virtual IList<T> Satisfy<T>(Query<T> query) where T : class, IEntity
         {
             var entities = _entities.Where(e => typeof(T).IsAssignableFrom(e.GetType())).Cast<T>();
 
@@ -116,19 +116,19 @@ namespace Reposify.Testing
             return entities.ToList();
         }
 
-        public void ShouldContain(IEntity<TId> entity)
+        public void ShouldContain(IEntity entity)
         {
             if (entity == null)
                 throw new Exception("Entity to be verified should not be null");
 
-            if (entity.Id == null || entity.Id.Equals(default(TId)))
+            if (entity.Id == null || entity.Id.Equals(Activator.CreateInstance(entity.Id.GetType())))
                 throw new Exception("Entity to be verified has an unsaved Id value: " + entity.Id);
 
             if (!_entities.Contains(entity))
                 throw new Exception(string.Format("Could not find Entity with Id {0} in Repository", entity.Id));
         }
 
-        public void ShouldContain<T>(TId id)
+        public void ShouldContain<T>(object id)
         {
             var entity = _entities.Where(e => e.Id.Equals(id)).SingleOrDefault();
 

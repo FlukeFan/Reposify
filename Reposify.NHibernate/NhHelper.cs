@@ -8,12 +8,14 @@ namespace Reposify.NHibernate
 {
     public static class NhHelper
     {
-        public static HbmMapping CreateConventionalMappings<TId>(Type rootEntityType, ConventionModelMapper mapper = null)
+        public static HbmMapping CreateConventionalMappings<TRootEntity>(ConventionModelMapper mapper = null, Action<ConventionModelMapper> mapperModifier = null)
         {
             mapper = mapper ?? new ConventionModelMapper();
 
+            var rootEntityType = typeof(TRootEntity);
+
             var baseEntities =
-                rootEntityType.Assembly.GetTypes()
+                rootEntityType.Assembly.GetExportedTypes()
                     .Where(t => t.BaseType == rootEntityType)
                     .OrderBy(t => t.FullName);
 
@@ -36,17 +38,16 @@ namespace Reposify.NHibernate
             mapper.IsRootEntity((t, declared) => baseEntities.Contains(t));
             mapper.IsTablePerClassHierarchy((t, declared) => entitiesWithHierarchy.Contains(t));
 
-            mapper.Class<IEntity<TId>>(m =>
-            {
-                m.Id(e => e.Id, im => im.Generator(Generators.Native));
-            });
+            mapper.BeforeMapClass += (modelInspector, type, classCustomizer) => classCustomizer.Id(idm => idm.Generator(Generators.Native));
+
+            mapperModifier?.Invoke(mapper);
 
             return mapper.CompileMappingFor(allEntities);
         }
 
-        public static Configuration CreateConfig<TId>(Type rootEntityType, Action<Configuration> configure)
+        public static Configuration CreateConfig<TRootEntity>(Action<Configuration> configure)
         {
-            var mappings = CreateConventionalMappings<TId>(rootEntityType);
+            var mappings = CreateConventionalMappings<TRootEntity>();
             return CreateConfig(mappings, configure);
         }
 

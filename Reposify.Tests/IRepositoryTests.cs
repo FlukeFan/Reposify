@@ -7,9 +7,9 @@ namespace Reposify.Tests
     [TestFixture]
     public abstract class IRepositoryTests
     {
-        abstract protected IRepository<int> New();
+        abstract protected IRepository New();
 
-        private IRepository<int> _repository;
+        private IRepository _repository;
 
         [SetUp]
         public virtual void SetUp()

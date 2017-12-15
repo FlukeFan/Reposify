@@ -6,7 +6,7 @@ using Reposify.Queries;
 
 namespace Reposify.NHibernate
 {
-    public class NhRepository<TId> : IIdentityMapRepository<TId>, IDisposable
+    public class NhRepository : IIdentityMapRepository, IDisposable
     {
         public static ISessionFactory SessionFactory { get; protected set; }
 
@@ -22,12 +22,12 @@ namespace Reposify.NHibernate
 
         protected ISession          _session;
         protected ITransaction      _transaction;
-        protected NhHandlers<TId>   _handlers       = new NhHandlers<TId>();
+        protected NhHandlers        _handlers       = new NhHandlers();
 
         public ISession     Session     { get { return _session; } }
         public ITransaction Transaction { get { return _transaction; } }
 
-        public virtual NhRepository<TId> Open()
+        public virtual NhRepository Open()
         {
             if (SessionFactory == null)
                 throw new Exception("Call Init() once to setup the session factory");
@@ -44,7 +44,7 @@ namespace Reposify.NHibernate
             _session = null;
         }
 
-        public NhRepository<TId> UsingHandlers(NhHandlers<TId> handlers)
+        public NhRepository UsingHandlers(NhHandlers handlers)
         {
             _handlers = handlers;
             return this;
@@ -60,18 +60,18 @@ namespace Reposify.NHibernate
             return _handlers.Execute(this, dbQuery);
         }
 
-        public virtual T Save<T>(T entity) where T : class, IEntity<TId>
+        public virtual T Save<T>(T entity) where T : class, IEntity
         {
             _session.Save(entity);
             return entity;
         }
 
-        public virtual T Load<T>(TId id) where T : class, IEntity<TId>
+        public virtual T Load<T>(object id) where T : class, IEntity
         {
             return _session.Load<T>(id);
         }
 
-        public virtual void Delete<T>(T entity) where T : class, IEntity<TId>
+        public virtual void Delete<T>(T entity) where T : class, IEntity
         {
             _session.Delete(entity);
         }
@@ -86,12 +86,12 @@ namespace Reposify.NHibernate
             _session.Clear();
         }
 
-        public virtual Query<T, TId> Query<T>() where T : class, IEntity<TId>
+        public virtual Query<T> Query<T>() where T : class, IEntity
         {
-            return new Query<T, TId>(this);
+            return new Query<T>(this);
         }
 
-        public virtual IList<T> Satisfy<T>(Query<T, TId> query) where T : class, IEntity<TId>
+        public virtual IList<T> Satisfy<T>(Query<T> query) where T : class, IEntity
         {
             var nhCriteria = NhCriteria.For(query);
             var criteria = nhCriteria.CreateCriteria(_session);

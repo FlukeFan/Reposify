@@ -1,6 +1,6 @@
 ﻿namespace Reposify
 {
-    public interface IIdentityMapRepository<TId> : IRepository<TId>
+    public interface IIdentityMapRepository : IRepository
     {
         void Clear();
     }

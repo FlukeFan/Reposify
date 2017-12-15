@@ -8,13 +8,13 @@ namespace Reposify.NHibernate
 {
     public static class NhCriteria
     {
-        public static NhCriteria<T, TId> For<T, TId>(Query<T, TId> query) where T : class, IEntity<TId>
+        public static NhCriteria<T> For<T>(Query<T> query) where T : class, IEntity
         {
-            return new NhCriteria<T, TId>(query);
+            return new NhCriteria<T>(query);
         }
     }
 
-    public class NhCriteria<T, TId> where T : class, IEntity<TId>
+    public class NhCriteria<T> where T : class, IEntity
     {
         private static IDictionary<Type, Action<ICriteria, Where>> _restrictionProcessors = new Dictionary<Type, Action<ICriteria, Where>>
         {
@@ -37,9 +37,9 @@ namespace Reposify.NHibernate
             { Direction.Descending, (prop) => Order.Desc(prop)  },
         };
 
-        public Query<T, TId> Query { get; protected set; }
+        public Query<T> Query { get; protected set; }
 
-        public NhCriteria(Query<T, TId> query)
+        public NhCriteria(Query<T> query)
         {
             Query = query;
         }

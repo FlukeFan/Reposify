@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace Reposify.Ef6
 {
-    public class Ef6Handlers<TId>
+    public class Ef6Handlers
     {
         protected IDictionary<Type, Type>   _executionHandlers  = new Dictionary<Type, Type>();
         protected IDictionary<Type, Type>   _queryHandlers      = new Dictionary<Type, Type>();
 
         public Func<Type, object> HandlerFactory = t => Activator.CreateInstance(t);
 
-        public Ef6Handlers<TId> UsingHandlersFromAssemblyForType<T>()
+        public Ef6Handlers UsingHandlersFromAssemblyForType<T>()
         {
             var assembly = typeof(T).Assembly;
             var types = assembly.GetTypes()
@@ -27,18 +27,18 @@ namespace Reposify.Ef6
 
                     var genericType = intrface.GetGenericTypeDefinition();
 
-                    if (genericType == typeof(IEf6ExecutionHandler<,>))
-                        _executionHandlers[intrface.GenericTypeArguments[1]] = type;
+                    if (genericType == typeof(IEf6ExecutionHandler<>))
+                        _executionHandlers[intrface.GenericTypeArguments[0]] = type;
 
-                    if (genericType == typeof(IEf6QueryHandler<,,>))
-                        _queryHandlers[intrface.GenericTypeArguments[1]] = type;
+                    if (genericType == typeof(IEf6QueryHandler<,>))
+                        _queryHandlers[intrface.GenericTypeArguments[0]] = type;
                 }
             }
 
             return this;
         }
 
-        public virtual void Execute(Ef6Repository<TId> repository, IDbExecution dbExecution)
+        public virtual void Execute(Ef6Repository repository, IDbExecution dbExecution)
         {
             if (dbExecution == null)
                 throw new Exception("attempt to execute null query");
@@ -46,7 +46,7 @@ namespace Reposify.Ef6
             var type = dbExecution.GetType();
 
             if (!_executionHandlers.ContainsKey(type))
-                throw new Exception($"no handler found for {type} - ensure there is a handler registered that implements IEf6ExecutionHandler<{typeof(TId).Name},{type.Name}>");
+                throw new Exception($"no handler found for {type} - ensure there is a handler registered that implements IEf6ExecutionHandler<{type.Name}>");
 
             var handlerType = _executionHandlers[type];
             var handler = HandlerFactory(handlerType);
@@ -58,7 +58,7 @@ namespace Reposify.Ef6
             execute.Invoke(handler, new object[] { repository, dbExecution });
         }
 
-        public virtual TResult Execute<TResult>(Ef6Repository<TId> repository, IDbQuery<TResult> dbQuery)
+        public virtual TResult Execute<TResult>(Ef6Repository repository, IDbQuery<TResult> dbQuery)
         {
             if (dbQuery == null)
                 throw new Exception("attempt to execute null query");
@@ -66,7 +66,7 @@ namespace Reposify.Ef6
             var type = dbQuery.GetType();
 
             if (!_queryHandlers.ContainsKey(type))
-                throw new Exception($"no handler found for {type} - ensure there is a handler registered that implements IEf6QueryHandler<{typeof(TId).Name},{type.Name}>");
+                throw new Exception($"no handler found for {type} - ensure there is a handler registered that implements IEf6QueryHandler<{type.Name}>");
 
             var handlerType = _queryHandlers[type];
             var handler = HandlerFactory(handlerType);

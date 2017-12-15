@@ -6,11 +6,11 @@ using Reposify.Queries;
 
 namespace Reposify.Ef6
 {
-    public class Ef6Repository<TId> : IIdentityMapRepository<TId>, IDisposable
+    public class Ef6Repository : IIdentityMapRepository, IDisposable
     {
         protected DbContext                 _dbContext;
         protected DbContextTransaction      _transaction;
-        protected Ef6Handlers<TId>          _handlers = new Ef6Handlers<TId>();
+        protected Ef6Handlers               _handlers = new Ef6Handlers();
 
         public DbContext            DbContext   { get { return _dbContext; } }
         public DbContextTransaction Transaction { get { return _transaction; } }
@@ -20,7 +20,7 @@ namespace Reposify.Ef6
             _dbContext = dbContext;
         }
 
-        public virtual Ef6Repository<TId> Open()
+        public virtual Ef6Repository Open()
         {
             _transaction = _dbContext.Database.BeginTransaction();
             return this;
@@ -31,7 +31,7 @@ namespace Reposify.Ef6
             _transaction.Commit();
         }
 
-        public Ef6Repository<TId> UsingHandlers(Ef6Handlers<TId> handlers)
+        public Ef6Repository UsingHandlers(Ef6Handlers handlers)
         {
             _handlers = handlers;
             return this;
@@ -47,19 +47,19 @@ namespace Reposify.Ef6
             return _handlers.Execute(this, dbQuery);
         }
 
-        public virtual T Save<T>(T entity) where T : class, IEntity<TId>
+        public virtual T Save<T>(T entity) where T : class, IEntity
         {
             _dbContext.Set<T>().Add(entity);
             _dbContext.SaveChanges();
             return entity;
         }
 
-        public virtual T Load<T>(TId id) where T : class, IEntity<TId>
+        public virtual T Load<T>(object id) where T : class, IEntity
         {
             return _dbContext.Set<T>().Find(id);
         }
 
-        public virtual void Delete<T>(T entity) where T : class, IEntity<TId>
+        public virtual void Delete<T>(T entity) where T : class, IEntity
         {
             _dbContext.Set<T>().Remove(entity);
             _dbContext.SaveChanges();
@@ -73,12 +73,12 @@ namespace Reposify.Ef6
         {
         }
 
-        public virtual Query<T, TId> Query<T>() where T : class, IEntity<TId>
+        public virtual Query<T> Query<T>() where T : class, IEntity
         {
-            return new Query<T, TId>(this);
+            return new Query<T>(this);
         }
 
-        public virtual IList<T> Satisfy<T>(Query<T, TId> query) where T : class, IEntity<TId>
+        public virtual IList<T> Satisfy<T>(Query<T> query) where T : class, IEntity
         {
             var dbSet = (IEnumerable<T>)_dbContext.Set<T>();
 

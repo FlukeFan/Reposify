@@ -5,9 +5,9 @@ using System.Linq.Expressions;
 
 namespace Reposify.Queries
 {
-    public class Query<T, TId> where T : class, IEntity<TId>
+    public class Query<T> where T : class, IEntity
     {
-        private IRepository<TId>    _repository;
+        private IRepository         _repository;
         private IList<Where>        _restrictions   = new List<Where>();
         private IList<Ordering>     _orders         = new List<Ordering>();
 
@@ -17,36 +17,36 @@ namespace Reposify.Queries
         public int?                     SkipCount       { get; protected set; }
         public int?                     TakeCount       { get; protected set; }
 
-        public Query(IRepository<TId> repository)
+        public Query(IRepository repository)
         {
             _repository = repository;
         }
 
-        public Query<T, TId> Filter(Expression<Func<T, bool>> restriction)
+        public Query<T> Filter(Expression<Func<T, bool>> restriction)
         {
             _restrictions.Add(Where.For(restriction));
             return this;
         }
 
-        public Query<T, TId> OrderBy<TKey>(Expression<Func<T, TKey>> property)
+        public Query<T> OrderBy<TKey>(Expression<Func<T, TKey>> property)
         {
             _orders.Add(Ordering.For(property, Direction.Ascending));
             return this;
         }
 
-        public Query<T, TId> OrderByDescending<TKey>(Expression<Func<T, TKey>> property)
+        public Query<T> OrderByDescending<TKey>(Expression<Func<T, TKey>> property)
         {
             _orders.Add(Ordering.For(property, Direction.Descending));
             return this;
         }
 
-        public Query<T, TId> Skip(int skipCount)
+        public Query<T> Skip(int skipCount)
         {
             SkipCount = skipCount;
             return this;
         }
 
-        public Query<T, TId> Take(int takeCount)
+        public Query<T> Take(int takeCount)
         {
             TakeCount = takeCount;
             return this;

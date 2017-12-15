@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace Reposify.NHibernate
 {
-    public class NhHandlers<TId>
+    public class NhHandlers
     {
         protected IDictionary<Type, Type>   _executionHandlers  = new Dictionary<Type, Type>();
         protected IDictionary<Type, Type>   _queryHandlers      = new Dictionary<Type, Type>();
 
         public Func<Type, object> HandlerFactory = t => Activator.CreateInstance(t);
 
-        public NhHandlers<TId> UsingHandlersFromAssemblyForType<T>()
+        public NhHandlers UsingHandlersFromAssemblyForType<T>()
         {
             var assembly = typeof(T).Assembly;
             var types = assembly.GetTypes()
@@ -27,18 +27,18 @@ namespace Reposify.NHibernate
 
                     var genericType = intrface.GetGenericTypeDefinition();
 
-                    if (genericType == typeof(INhExecutionHandler<,>))
-                        _executionHandlers[intrface.GenericTypeArguments[1]] = type;
+                    if (genericType == typeof(INhExecutionHandler<>))
+                        _executionHandlers[intrface.GenericTypeArguments[0]] = type;
 
-                    if (genericType == typeof(INhQueryHandler<,,>))
-                        _queryHandlers[intrface.GenericTypeArguments[1]] = type;
+                    if (genericType == typeof(INhQueryHandler<,>))
+                        _queryHandlers[intrface.GenericTypeArguments[0]] = type;
                 }
             }
 
             return this;
         }
 
-        public virtual void Execute(NhRepository<TId> repository, IDbExecution dbExecution)
+        public virtual void Execute(NhRepository repository, IDbExecution dbExecution)
         {
             if (dbExecution == null)
                 throw new Exception("attempt to execute null query");
@@ -46,7 +46,7 @@ namespace Reposify.NHibernate
             var type = dbExecution.GetType();
 
             if (!_executionHandlers.ContainsKey(type))
-                throw new Exception($"no handler found for {type} - ensure there is a handler registered that implements INhExecutionHandler<{typeof(TId).Name},{type.Name}>");
+                throw new Exception($"no handler found for {type} - ensure there is a handler registered that implements INhExecutionHandler<{type.Name}>");
 
             var handlerType = _executionHandlers[type];
             var handler = HandlerFactory(handlerType);
@@ -58,7 +58,7 @@ namespace Reposify.NHibernate
             execute.Invoke(handler, new object[] { repository, dbExecution });
         }
 
-        public virtual TResult Execute<TResult>(NhRepository<TId> repository, IDbQuery<TResult> dbQuery)
+        public virtual TResult Execute<TResult>(NhRepository repository, IDbQuery<TResult> dbQuery)
         {
             if (dbQuery == null)
                 throw new Exception("attempt to execute null query");
@@ -66,7 +66,7 @@ namespace Reposify.NHibernate
             var type = dbQuery.GetType();
 
             if (!_queryHandlers.ContainsKey(type))
-                throw new Exception($"no handler found for {type} - ensure there is a handler registered that implements INhQueryHandler<{typeof(TId).Name},{type.Name}>");
+                throw new Exception($"no handler found for {type} - ensure there is a handler registered that implements INhQueryHandler<{type.Name}>");
 
             var handlerType = _queryHandlers[type];
             var handler = HandlerFactory(handlerType);

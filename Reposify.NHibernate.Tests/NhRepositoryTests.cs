@@ -14,7 +14,7 @@ namespace Reposify.NHibernate.Tests
 {
     public class NhRepositoryTests : IRepositoryTests
     {
-        private static NhHandlers<int> _handlers;
+        private static NhHandlers _handlers;
 
         static NhRepositoryTests()
         {
@@ -27,7 +27,7 @@ namespace Reposify.NHibernate.Tests
                     propertyCustomizer.Type(NHibernateUtil.StringClob);
             };
 
-            var mappings = NhHelper.CreateConventionalMappings<int>(typeof(TestsEntity), mapper);
+            var mappings = NhHelper.CreateConventionalMappings<TestsEntity>(mapper);
             var config = NhHelper.CreateConfig(mappings, cfg =>
             {
                 cfg.DataBaseIntegration(db =>
@@ -39,15 +39,15 @@ namespace Reposify.NHibernate.Tests
                 });
             });
 
-            NhRepository<int>.Init(config);
-            _handlers = new NhHandlers<int>().UsingHandlersFromAssemblyForType<NhRepositoryTests>();
+            NhRepository.Init(config);
+            _handlers = new NhHandlers().UsingHandlersFromAssemblyForType<NhRepositoryTests>();
         }
 
-        private NhRepository<int> _repository;
+        private NhRepository _repository;
 
-        protected override IRepository<int> New()
+        protected override IRepository New()
         {
-            _repository = new NhRepository<int>().UsingHandlers(_handlers).Open();
+            _repository = new NhRepository().UsingHandlers(_handlers).Open();
             return _repository;
         }
 

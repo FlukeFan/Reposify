@@ -23,18 +23,18 @@ namespace Reposify.Ef6.Tests
         }
 
         private static BuildEnvironment _environment;
-        private static Ef6Handlers<int> _handlers;
+        private static Ef6Handlers      _handlers;
 
         static Ef6RepositoryTests()
         {
             _environment = BuildEnvironment.Load();
-            _handlers = new Ef6Handlers<int>().UsingHandlersFromAssemblyForType<Ef6RepositoryTests>();
+            _handlers = new Ef6Handlers().UsingHandlersFromAssemblyForType<Ef6RepositoryTests>();
         }
 
-        protected override IRepository<int> New()
+        protected override IRepository New()
         {
             var dbContext = new TestsDbContext(_environment.Connection);
-            return new Ef6Repository<int>(dbContext).UsingHandlers(_handlers).Open();
+            return new Ef6Repository(dbContext).UsingHandlers(_handlers).Open();
         }
 
         public override void TearDown()

@@ -134,7 +134,7 @@ namespace Reposify.Tests.Testing
             return e;
         }
 
-        private class FakeMemoryRepository : MemoryRepository<int>
+        private class FakeMemoryRepository : MemoryRepository
         {
             private PolyType _entity;
 
@@ -143,7 +143,7 @@ namespace Reposify.Tests.Testing
                 _entity = entity;
             }
 
-            public override T Load<T>(int id)
+            public override T Load<T>(object id)
             {
                 Builder.Modify(_entity).With(e => e.Id, id);
                 return (T)(object)_entity;

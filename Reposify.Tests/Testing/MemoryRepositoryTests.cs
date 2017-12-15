@@ -9,11 +9,11 @@ namespace Reposify.Tests.Testing
 {
     public class MemoryRepositoryTests : IRepositoryTests
     {
-        private MemoryRepository<int> _repository;
+        private MemoryRepository _repository;
 
-        protected override IRepository<int> New()
+        protected override IRepository New()
         {
-            _repository = new MemoryRepository<int>(new ConstraintChecker());
+            _repository = new MemoryRepository(new ConstraintChecker());
             return _repository;
         }
 
@@ -43,7 +43,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void ShouldContain()
         {
-            var repository = new MemoryRepository<int>(new ConstraintChecker());
+            var repository = new MemoryRepository(new ConstraintChecker());
             var entity = new PolyTypeBuilder().Value();
 
             repository.Save(entity);
@@ -55,7 +55,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void All_IsShortcutForQueryList()
         {
-            var repository = new MemoryRepository<int>(new ConstraintChecker());
+            var repository = new MemoryRepository(new ConstraintChecker());
 
             repository.Save(new PolyTypeBuilder().Value());
             repository.Save(new PolyTypeBuilder().Value());
@@ -67,7 +67,7 @@ namespace Reposify.Tests.Testing
         [Test]
         public void ShouldContain_Throws()
         {
-            var repository = new MemoryRepository<int>(new ConstraintChecker());
+            var repository = new MemoryRepository(new ConstraintChecker());
 
             Assert.Throws<Exception>(() => repository.ShouldContain(null)).Message.Should().Contain("should not be null");
             Assert.Throws<Exception>(() => repository.ShouldContain(new PolyTypeBuilder().Value())).Message.Should().Contain("has an unsaved Id value");

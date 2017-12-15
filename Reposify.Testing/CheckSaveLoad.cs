@@ -8,29 +8,29 @@ namespace Reposify.Testing
 {
     public static class CheckSaveLoadExtensions
     {
-        public static CheckSaveLoad<TEntity, TId> CheckSaveLoad<TId, TEntity>(this IRepository<TId> repository, TEntity entity) where TEntity : class, IEntity<TId>
+        public static CheckSaveLoad<TEntity> CheckSaveLoad<TEntity>(this IRepository repository, TEntity entity) where TEntity : class, IEntity
         {
-            return new CheckSaveLoad<TEntity, TId>(entity, repository);
+            return new CheckSaveLoad<TEntity>(entity, repository);
         }
 
-        public static CheckSaveLoad<TEntity, TId> CheckSaveLoad<TEntity, TId>(this TEntity entity, IRepository<TId> repository) where TEntity : class, IEntity<TId>
+        public static CheckSaveLoad<TEntity> CheckSaveLoad<TEntity>(this TEntity entity, IRepository repository) where TEntity : class, IEntity
         {
-            return new CheckSaveLoad<TEntity, TId>(entity, repository);
+            return new CheckSaveLoad<TEntity>(entity, repository);
         }
 
-        public static CheckSaveLoad<TEntity, TId> ExcludeProperties<TEntity, TId>(this CheckSaveLoad<TEntity, TId> checkSaveLoad, params string[] excludedProperties) where TEntity : class, IEntity<TId>
+        public static CheckSaveLoad<TEntity> ExcludeProperties<TEntity>(this CheckSaveLoad<TEntity> checkSaveLoad, params string[] excludedProperties) where TEntity : class, IEntity
         {
             checkSaveLoad.SetExcludedProperties(excludedProperties);
             return checkSaveLoad;
         }
     }
 
-    public class CheckSaveLoad<TEntity, TId> : CheckSaveLoad where TEntity : class, IEntity<TId>
+    public class CheckSaveLoad<TEntity> : CheckSaveLoad where TEntity : class, IEntity
     {
-        private IRepository<TId>    _repository;
+        private IRepository         _repository;
         private TEntity             _entity;
 
-        public CheckSaveLoad(TEntity entity, IRepository<TId> repository)
+        public CheckSaveLoad(TEntity entity, IRepository repository)
         {
             _entity = entity;
             _repository = repository;
@@ -42,7 +42,7 @@ namespace Reposify.Testing
             _repository.Flush();
 
             // clear the repository if it supports identity map
-            (_repository as IIdentityMapRepository<TId>)?.Clear();
+            (_repository as IIdentityMapRepository)?.Clear();
 
             var loadedEntity = _repository.Load<TEntity>(_entity.Id);
             var visitor = new PropertyVisitor(CheckProperty);
