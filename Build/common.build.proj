@@ -1,0 +1,61 @@
+<Project>
+
+  <PropertyGroup>
+    <BuildUtil>$(MSBuildThisFileDirectory)\BuildUtil\bin\Debug\netcoreapp2.1\Build.BuildUtil.dll</BuildUtil>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Watch Include="**\*.cs" />
+    <Watch Include="**\*.css" />
+    <Watch Include="**\*.scss" />
+    <Watch Include="**\*.js" />
+    <Watch Remove="**\wwwroot\js\*.*" />
+    <Watch Include="**\*.json" />
+    <Watch Include="**\*.csproj" />
+    <Watch Include="**\*.proj" />
+    <Watch Include="**\*.targets" />
+    <Watch Include="**\*.cshtml" />
+    <Watch Remove="**\obj\**" />
+    <Watch Remove="**\bin\**" />
+  </ItemGroup>
+
+  <Target Name="GenerateWatchList">
+    <WriteLinesToFile
+      Overwrite="true"
+      File="$(_DotNetWatchListFile)"
+      Lines="@(Watch -> '%(FullPath)')" />
+  </Target>
+
+  <Target Name="Restore">
+    <MSBuild Projects="@(ProjectsToBuild)" Targets="Restore" BuildInParallel="false" />
+  </Target>
+
+  <Target Name="Build">
+    <PropertyGroup>
+      <BuildBeginTime>$([System.DateTime]::Now.ToString(yyyy-MM-dd HH:mm:ss))</BuildBeginTime>
+    </PropertyGroup>
+    <MSBuild Projects="@(ProjectsToBuild)" Targets="Build" BuildInParallel="true" />
+    <PropertyGroup>
+      <BuildTime>Time:$([System.DateTime]::Now.Subtract($(BuildBeginTime)).TotalSeconds.ToString(0.00))s</BuildTime>
+    </PropertyGroup>
+    <Message Text="Build Success $(BuildTime) $(MSBuildProjectFullPath)" Importance="high" />
+    <OnError ExecuteTargets="BuildError" />
+  </Target>
+
+  <Target Name="Clean">
+    <MSBuild Projects="@(ProjectsToBuild->Reverse())" Targets="Clean" BuildInParallel="false" />
+    <ItemGroup>
+      <BinFolders Include="**\*.csproj" />
+    </ItemGroup>
+    <RemoveDir Directories="@(BinFolders->'%(RelativeDir)bin')" />
+    <RemoveDir Directories="@(BinFolders->'%(RelativeDir)obj')" />
+  </Target>
+
+  <Target Name="BuildError">
+    <PropertyGroup>
+      <BuildTime>Time:$([System.DateTime]::Now.Subtract($(BuildBeginTime)).TotalSeconds.ToString(0.00))s</BuildTime>
+    </PropertyGroup>
+    <Error Text="***** Build Fail $(BuildTime) $(MSBuildProjectFullPath) *****" />
+  </Target>
+
+</Project>

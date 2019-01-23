@@ -1,4 +1,0 @@
-<settings>
-  <MasterConnection>Server=(local); Integrated Security=true;</MasterConnection>
-  <Connection>Server=(local); Integrated Security=true; Initial Catalog=Reposify;</Connection>
-</settings>

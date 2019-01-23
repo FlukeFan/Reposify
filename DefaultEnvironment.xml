@@ -1,0 +1,4 @@
+<settings>
+  <MasterConnection>Server=localhost,52433;Database=master;User ID=sa;Password=Password12!</MasterConnection>
+  <Connection>Server=localhost,52433;Database=Reposify;User ID=sa;Password=Password12!</Connection>
+</settings>

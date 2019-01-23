@@ -1,0 +1,29 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="Build/common.build.proj" />
+  <Import Project="Build/common.targets" />
+
+  <ItemGroup>
+  </ItemGroup>
+
+  <Target Name="BeforeBuild" BeforeTargets="Build">
+    <MSBuild Projects="Build\BuildUtil\Build.BuildUtil.csproj" Targets="Build" Properties="Configuration=Debug" />
+  </Target>
+
+  <Target Name="BeforeRestore" BeforeTargets="Restore">
+    <MSBuild Projects="Build\BuildUtil\Build.BuildUtil.csproj" Targets="Restore" />
+  </Target>
+
+  <Target Name="SetApiKey">
+    <Exec Command="dotnet nuget setApiKey $(apiKey) --source nuget.org" />
+  </Target>
+
+  <Target Name="Push">
+    <Error Text="need to update this" />
+    <Exec Command="dotnet msbuild build.proj /p:RunTests=true /p:Configuration=Release" />
+    <Exec Command="dotnet nuget push Reposify\bin\Release\Reposify.$(Version).nupkg --source nuget.org" />
+    <Exec Command="dotnet clean build.proj" />
+    <Message Importance="high" Text="Version $(Version) pushed to nuget.org" />
+  </Target>
+
+</Project>

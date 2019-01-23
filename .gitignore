@@ -1,12 +1,5 @@
-
-*/bin
-*/obj
-*/*.csproj.user
-*.suo
-*.sln.cache
-/.vs
-
-/_output
-/Build/Reposify.VisualState.xml
-/Build/TestResult.xml
-/packages
+bin
+obj
+.vs
+.vscode
+*.user
