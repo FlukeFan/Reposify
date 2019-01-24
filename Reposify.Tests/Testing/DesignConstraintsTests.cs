@@ -6,6 +6,7 @@ namespace Reposify.Tests.Testing
     public class DesignContraintsTests
     {
         [Test]
+        [Ignore("WIP")]
         public void DependenciesHaveNotChanged()
         {
             var folder = @"..\..\..\_output";
