@@ -4,7 +4,6 @@
   <PropertyGroup>
 
     <Version>0.0.4</Version>
-    <Description>A generic C# .Net Repository with a primary focus on testability.</Description>
     <PackageTags>Repository Testing Tests Memory</PackageTags>
     <Authors>Richard Brown</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

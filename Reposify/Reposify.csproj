@@ -3,6 +3,7 @@
   <Import Project="..\Build\Common.targets" />
 
   <PropertyGroup>
+    <Description>A generic C# .Net Repository with a primary focus on testability.</Description>
     <TargetFramework>netstandard2.0</TargetFramework>
     <DebugType>full</DebugType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
