@@ -6,16 +6,14 @@ namespace Reposify.Tests
     public class DesignContraintsTests
     {
         [Test]
-        [Ignore("WIP")]
         public void DependenciesHaveNotChanged()
         {
-            var folder = @"..\..\..\_output";
             var name = "Reposify";
+            var packageFolder = TestUtil.FindBinConfigFolder(".", name);
 
-            NugetPackage.Find(folder, name)
-                .VerifyDependencies(new string[]
-                {
-                });
+            NugetPackage.VerifyDependencies(packageFolder, name, new string[]
+            {
+            });
         }
     }
 }
