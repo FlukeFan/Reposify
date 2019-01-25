@@ -34,7 +34,7 @@
     <PropertyGroup>
       <BuildBeginTime>$([System.DateTime]::Now.ToString(yyyy-MM-dd HH:mm:ss))</BuildBeginTime>
     </PropertyGroup>
-    <MSBuild Projects="@(ProjectsToBuild)" Targets="Build" BuildInParallel="true" />
+    <MSBuild Projects="@(ProjectsToBuild)" Targets="Build" BuildInParallel="false" />
     <PropertyGroup>
       <BuildTime>Time:$([System.DateTime]::Now.Subtract($(BuildBeginTime)).TotalSeconds.ToString(0.00))s</BuildTime>
     </PropertyGroup>
