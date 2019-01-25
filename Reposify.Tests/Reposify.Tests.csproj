@@ -19,4 +19,9 @@
     <ProjectReference Include="..\Reposify.Testing\Reposify.Testing.csproj" />
   </ItemGroup>
 
+  <!-- msbuild 'bug' means we have to explicitly wait on package being built -->
+  <Target Name="VerifyPackagesBuilt" BeforeTargets="CoreCompile">
+    <MSBuild Projects="..\Reposify.Testing\Reposify.Testing.csproj" Targets="GenerateNuspec" />
+  </Target>
+
 </Project>
