@@ -12,14 +12,14 @@ namespace Reposify.Database.Tests
         public static BuildEnvironment Load()
         {
             var folder = Environment.CurrentDirectory;
-            var searchFile = "_output/BuildEnvironment.xml";
+            var searchFile = "DefaultEnvironment.xml";
 
             while (!File.Exists(Path.Combine(folder, searchFile)))
             {
                 var dir = new DirectoryInfo(folder);
 
                 if (dir.Parent == null)
-                    throw new Exception("Could not find file " + searchFile);
+                    throw new Exception($"Could not find file {searchFile} in parent of {Environment.CurrentDirectory}");
 
                 folder = dir.Parent.FullName;
             }
@@ -29,8 +29,11 @@ namespace Reposify.Database.Tests
             xml.Load(buildEnvironmentFile);
             var buildEnvironment = new BuildEnvironment();
 
-            buildEnvironment.MasterConnection = xml.SelectSingleNode("//MasterConnection").InnerText;
-            buildEnvironment.Connection = xml.SelectSingleNode("//Connection").InnerText;
+            var envMasterConnection = Environment.GetEnvironmentVariable("MasterConnection");
+            var envConnection = Environment.GetEnvironmentVariable("Connection");
+
+            buildEnvironment.MasterConnection = envMasterConnection ?? xml.SelectSingleNode("//MasterConnection").InnerText;
+            buildEnvironment.Connection = envConnection ?? xml.SelectSingleNode("//Connection").InnerText;
 
             return buildEnvironment;
         }

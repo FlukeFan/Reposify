@@ -6,7 +6,6 @@ using NUnit.Framework;
 namespace Reposify.Database.Tests
 {
     [TestFixture]
-    [Ignore("WIP")]
     public class CreateDatabaseTests
     {
         private static BuildEnvironment _environment = BuildEnvironment.Load();
