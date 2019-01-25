@@ -8,7 +8,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_root", "_root", "{53FBF835
 		.gitignore = .gitignore
 		build.proj = build.proj
 		CommandPrompt.bat = CommandPrompt.bat
+		DefaultEnvironment.xml = DefaultEnvironment.xml
+		docker-compose.yml = docker-compose.yml
 		global.json = global.json
+		icon.png = icon.png
 		LICENSE.txt = LICENSE.txt
 		readme.md = readme.md
 	EndProjectSection
@@ -21,13 +24,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{73FAF5E9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Build.BuildUtil", "Build\BuildUtil\Build.BuildUtil.csproj", "{B7FF9024-03E3-4C25-8818-B7E3B8C8C97F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify", "Reposify\Reposify.csproj", "{675E4FB0-EC4E-4207-B8DB-2D635D12CF0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reposify", "Reposify\Reposify.csproj", "{675E4FB0-EC4E-4207-B8DB-2D635D12CF0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.Testing", "Reposify.Testing\Reposify.Testing.csproj", "{482E23CE-914D-4312-B772-61D11CCBFA3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reposify.Testing", "Reposify.Testing\Reposify.Testing.csproj", "{482E23CE-914D-4312-B772-61D11CCBFA3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.NHibernate", "Reposify.NHibernate\Reposify.NHibernate.csproj", "{E998E740-8FCF-4B46-8992-11720460B2CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reposify.NHibernate", "Reposify.NHibernate\Reposify.NHibernate.csproj", "{E998E740-8FCF-4B46-8992-11720460B2CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.Tests", "Reposify.Tests\Reposify.Tests.csproj", "{8C151238-F05C-4B21-B47E-2CA9471B9EAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reposify.Tests", "Reposify.Tests\Reposify.Tests.csproj", "{8C151238-F05C-4B21-B47E-2CA9471B9EAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.Database.Tests", "Reposify.Database.Tests\Reposify.Database.Tests.csproj", "{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +104,18 @@ Global
 		{8C151238-F05C-4B21-B47E-2CA9471B9EAF}.Release|x64.Build.0 = Release|Any CPU
 		{8C151238-F05C-4B21-B47E-2CA9471B9EAF}.Release|x86.ActiveCfg = Release|Any CPU
 		{8C151238-F05C-4B21-B47E-2CA9471B9EAF}.Release|x86.Build.0 = Release|Any CPU
+		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Debug|x64.Build.0 = Debug|Any CPU
+		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Debug|x86.Build.0 = Debug|Any CPU
+		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Release|x64.ActiveCfg = Release|Any CPU
+		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Release|x64.Build.0 = Release|Any CPU
+		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Release|x86.ActiveCfg = Release|Any CPU
+		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
