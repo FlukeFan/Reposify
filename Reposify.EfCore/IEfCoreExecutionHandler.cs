@@ -1,7 +1,7 @@
-﻿namespace Reposify.Ef6
+﻿namespace Reposify.EfCore
 {
-    public interface IEf6ExecutionHandler<TDbExecution> where TDbExecution : IDbExecution
+    public interface IEfCoreExecutionHandler<TDbExecution> where TDbExecution : IDbExecution
     {
-        void Execute(Ef6Repository repository, TDbExecution dbExecution);
+        void Execute(EfCoreRepository repository, TDbExecution dbExecution);
     }
 }

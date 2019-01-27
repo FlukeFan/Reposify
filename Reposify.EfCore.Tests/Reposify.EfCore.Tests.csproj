@@ -5,8 +5,8 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
-    <RootNamespace>Reposify.Ef6.Tests</RootNamespace>
-    <AssemblyName>Reposify.Ef6.Tests</AssemblyName>
+    <RootNamespace>Reposify.EfCore.Tests</RootNamespace>
+    <AssemblyName>Reposify.EfCore.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\_output\AssemblyInfo.cs" />
-    <Compile Include="Ef6RepositoryTests.cs" />
+    <Compile Include="EfCoreRepositoryTests.cs" />
     <Compile Include="QueryInHandler.cs" />
     <Compile Include="SaveEntitiesHandler.cs" />
   </ItemGroup>
@@ -68,9 +68,9 @@
       <Project>{c976d0c2-11a6-4993-a338-bdbaa0bfc67d}</Project>
       <Name>Reposify.Database.Tests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Reposify.Ef6\Reposify.Ef6.csproj">
+    <ProjectReference Include="..\Reposify.EfCore\Reposify.EfCore.csproj">
       <Project>{4fb36b09-3075-4f31-a078-7fffd8eb4f08}</Project>
-      <Name>Reposify.Ef6</Name>
+      <Name>Reposify.EfCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\Reposify.Testing\Reposify.Testing.csproj">
       <Project>{d0d43151-7a59-4fbd-bb3a-087ae0b5df06}</Project>

@@ -4,23 +4,23 @@ using System.Data.Entity;
 using System.Linq;
 using Reposify.Queries;
 
-namespace Reposify.Ef6
+namespace Reposify.EfCore
 {
-    public class Ef6Repository : IIdentityMapRepository, IDisposable
+    public class EfCoreRepository : IIdentityMapRepository, IDisposable
     {
         protected DbContext                 _dbContext;
         protected DbContextTransaction      _transaction;
-        protected Ef6Handlers               _handlers = new Ef6Handlers();
+        protected EfCoreHandlers            _handlers = new EfCoreHandlers();
 
         public DbContext            DbContext   { get { return _dbContext; } }
         public DbContextTransaction Transaction { get { return _transaction; } }
 
-        public Ef6Repository(DbContext dbContext)
+        public EfCoreRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public virtual Ef6Repository Open()
+        public virtual EfCoreRepository Open()
         {
             _transaction = _dbContext.Database.BeginTransaction();
             return this;
@@ -31,7 +31,7 @@ namespace Reposify.Ef6
             _transaction.Commit();
         }
 
-        public Ef6Repository UsingHandlers(Ef6Handlers handlers)
+        public EfCoreRepository UsingHandlers(EfCoreHandlers handlers)
         {
             _handlers = handlers;
             return this;

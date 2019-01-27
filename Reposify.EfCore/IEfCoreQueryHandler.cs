@@ -1,7 +1,7 @@
-﻿namespace Reposify.Ef6
+﻿namespace Reposify.EfCore
 {
-    public interface IEf6QueryHandler<TDbQuery, TResult> where TDbQuery : IDbQuery<TResult>
+    public interface IEfCoreQueryHandler<TDbQuery, TResult> where TDbQuery : IDbQuery<TResult>
     {
-        TResult Execute(Ef6Repository repository, TDbQuery dbquery);
+        TResult Execute(EfCoreRepository repository, TDbQuery dbquery);
     }
 }

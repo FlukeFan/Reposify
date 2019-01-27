@@ -4,8 +4,8 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$id$</title>
-    <description>Reposify EF6 implementation.</description>
-    <tags>Repository EF6</tags>
+    <description>Reposify EF Core implementation.</description>
+    <tags>Repository EF Core</tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <authors>Richard Brown</authors>
     <licenseUrl>https://raw.githubusercontent.com/FlukeFan/Reposify/master/LICENSE.txt</licenseUrl>

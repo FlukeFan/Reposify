@@ -69,13 +69,13 @@
     <ProjectsToBuild Include="Reposify.Database.Tests\Reposify.Database.Tests.csproj"/>
     <ProjectsToBuild Include="Reposify.NHibernate\Reposify.NHibernate.csproj"/>
     <ProjectsToBuild Include="Reposify.NHibernate.Tests\Reposify.NHibernate.Tests.csproj"/>
-    <ProjectsToBuild Include="Reposify.Ef6\Reposify.Ef6.csproj"/>
-    <ProjectsToBuild Include="Reposify.Ef6.Tests\Reposify.Ef6.Tests.csproj"/>
+    <ProjectsToBuild Include="Reposify.EfCore\Reposify.EfCore.csproj"/>
+    <ProjectsToBuild Include="Reposify.EfCore.Tests\Reposify.EfCore.Tests.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectsToClean Include="Reposify.Ef6.Tests\Reposify.Ef6.Tests.csproj"/>
-    <ProjectsToClean Include="Reposify.Ef6\Reposify.Ef6.csproj"/>
+    <ProjectsToClean Include="Reposify.EfCore.Tests\Reposify.EfCore.Tests.csproj"/>
+    <ProjectsToClean Include="Reposify.EfCore\Reposify.EfCore.csproj"/>
     <ProjectsToClean Include="Reposify.NHibernate.Tests\Reposify.NHibernate.Tests.csproj"/>
     <ProjectsToClean Include="Reposify.NHibernate\Reposify.NHibernate.csproj"/>
     <ProjectsToClean Include="Reposify.Database.Tests\Reposify.Database.Tests.csproj"/>
