@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Reposify.Queries;
 
 namespace Reposify.EfCore
@@ -9,11 +10,11 @@ namespace Reposify.EfCore
     public class EfCoreRepository : IIdentityMapRepository, IDisposable
     {
         protected DbContext                 _dbContext;
-        protected DbContextTransaction      _transaction;
+        protected IDbContextTransaction     _transaction;
         protected EfCoreHandlers            _handlers = new EfCoreHandlers();
 
-        public DbContext            DbContext   { get { return _dbContext; } }
-        public DbContextTransaction Transaction { get { return _transaction; } }
+        public DbContext                DbContext   { get { return _dbContext; } }
+        public IDbContextTransaction    Transaction { get { return _transaction; } }
 
         public EfCoreRepository(DbContext dbContext)
         {
