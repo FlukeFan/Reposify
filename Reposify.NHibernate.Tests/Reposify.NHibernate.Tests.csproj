@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <CoverageAssemblyFilter Include="Reposify$" />
+    <CoverageAssemblyFilter Include="Reposify.Testing" />
+    <CoverageAssemblyFilter Include="Reposify.Tests" />
+    <CoverageAssemblyFilter Include="Reposify.Database.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
   </ItemGroup>
 
