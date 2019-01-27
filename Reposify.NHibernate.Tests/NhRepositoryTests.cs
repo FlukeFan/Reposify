@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
@@ -43,21 +44,12 @@ namespace Reposify.NHibernate.Tests
             _handlers = new NhHandlers().UsingHandlersFromAssemblyForType<NhRepositoryTests>();
         }
 
-        private NhRepository _repository;
-
-        protected override IRepository New()
+        protected override IDisposable New()
         {
-            _repository = new NhRepository().UsingHandlers(_handlers).Open();
-            return _repository;
+            return new NhRepository().UsingHandlers(_handlers).Open();
         }
 
-        public override void TearDown()
-        {
-            using (_repository) { }
-            _repository = null;
-
-            base.TearDown();
-        }
+        private NhRepository Repository { get => (NhRepository)_disposable; }
 
         [Test]
         public void Flush_UpdatesUnderlyingTable()
@@ -66,8 +58,8 @@ namespace Reposify.NHibernate.Tests
                 .With(p => p.String, "initial value")
                 .Value();
 
-            _repository.Save(poly);
-            _repository.Flush();
+            Repository.Save(poly);
+            Repository.Flush();
 
             GetUnderlyingDbValue(poly.Id).Should().Be("initial value");
 
@@ -75,7 +67,7 @@ namespace Reposify.NHibernate.Tests
 
             GetUnderlyingDbValue(poly.Id).Should().Be("initial value", "DB has not been updated");
 
-            _repository.Flush();
+            Repository.Flush();
 
             GetUnderlyingDbValue(poly.Id).Should().Be("modified value", "in-memory changes have been flushed to the DB");
         }
@@ -87,8 +79,8 @@ namespace Reposify.NHibernate.Tests
                 .With(p => p.String, "initial value")
                 .Value();
 
-            _repository.Save(poly);
-            _repository.Flush();
+            Repository.Save(poly);
+            Repository.Flush();
 
             GetUnderlyingDbValue(poly.Id).Should().Be("initial value");
 
@@ -96,9 +88,9 @@ namespace Reposify.NHibernate.Tests
 
             GetUnderlyingDbValue(poly.Id).Should().Be("initial value", "DB has not been updated");
 
-            _repository.Clear();
+            Repository.Clear();
 
-            var loaded = _repository.Load<PolyType>(poly.Id);
+            var loaded = Repository.Load<PolyType>(poly.Id);
 
             loaded.String.Should().Be("initial value");
             loaded.Should().NotBeSameAs(poly);
@@ -107,20 +99,19 @@ namespace Reposify.NHibernate.Tests
         [Test]
         public void CheckSaveLoad()
         {
-            var repository = New();
-            var subType = new PolyTypeBuilder().Save(repository);
+            var subType = new PolyTypeBuilder().Save(Repository);
 
             var entity = new PolyTypeBuilder()
                 .With(e => e.SubType, subType)
                 .Value();
 
-            entity.CheckSaveLoad(repository).Check();
+            entity.CheckSaveLoad(Repository).Check();
         }
 
         private string GetUnderlyingDbValue(int id)
         {
             var sql = "SELECT [String] FROM [PolyType] WHERE [Id] = :id";
-            var query = _repository.Session.CreateSQLQuery(sql);
+            var query = Repository.Session.CreateSQLQuery(sql);
             query.SetInt32("id", id);
             return query.UniqueResult<string>();
         }

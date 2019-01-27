@@ -1,29 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 
 namespace Reposify.Tests
 {
-    [TestFixture]
-    public abstract class IRepositoryTests
+    public abstract class IRepositoryTests : IDisposableTests
     {
-        abstract protected IRepository New();
-
-        private IRepository _repository;
-
-        [SetUp]
-        public virtual void SetUp()
-        {
-            _repository = New();
-        }
-
-        [TearDown]
-        public virtual void TearDown()
-        {
-            ((IDisposable)_repository).Dispose();
-            _repository = null;
-        }
+        private IRepository Repository { get => (IRepository)_disposable; }
 
         [Test]
         public virtual void DbQuery_IsImplemented()
@@ -33,10 +16,10 @@ namespace Reposify.Tests
             var poly3 = new PolyTypeBuilder().With(p => p.String, "poly3").Value();
 
             var save = new QuerySaveEntities { EntitiesToSave = new[] { poly1, poly2, poly3 } };
-            _repository.Execute(save);
+            Repository.Execute(save);
 
             var query = new QueryIn { IntValues = new[] { poly1.Id, poly3.Id } };
-            var entitiesWithId = _repository.Execute(query);
+            var entitiesWithId = Repository.Execute(query);
 
             entitiesWithId.Select(e => e.String).Should().BeEquivalentTo("poly1", "poly3");
         }
@@ -48,7 +31,7 @@ namespace Reposify.Tests
 
             poly.Id.Should().Be(0, "newly instantiated entity should have a default Id value");
 
-            var savedUser = _repository.Save(poly);
+            var savedUser = Repository.Save(poly);
 
             savedUser.Should().BeSameAs(poly);
             savedUser.Id.Should().NotBe(0, "persisted entity should have a non-zero Id");
@@ -59,10 +42,10 @@ namespace Reposify.Tests
         {
             var poly = new PolyTypeBuilder().Value();
 
-            _repository.Save(poly);
+            Repository.Save(poly);
             poly.Id.Should().NotBe(0);
 
-            var loaded = _repository.Load<PolyType>(poly.Id);
+            var loaded = Repository.Load<PolyType>(poly.Id);
             loaded.Should().BeSameAs(poly);
         }
 
@@ -71,11 +54,11 @@ namespace Reposify.Tests
         {
             var poly = new PolyTypeBuilder().Value();
 
-            _repository.Save(poly);
+            Repository.Save(poly);
             poly.Id.Should().NotBe(0);
 
-            var loaded1 = _repository.Load<PolyType>(poly.Id);
-            var loaded2 = _repository.Load<PolyType>(poly.Id);
+            var loaded1 = Repository.Load<PolyType>(poly.Id);
+            var loaded2 = Repository.Load<PolyType>(poly.Id);
 
             loaded1.Should().BeSameAs(loaded2);
         }
@@ -83,12 +66,12 @@ namespace Reposify.Tests
         [Test]
         public virtual void Delete_RemovesEntity()
         {
-            var poly1 = new PolyTypeBuilder().Save(_repository);
-            var poly2 = new PolyTypeBuilder().Save(_repository);
+            var poly1 = new PolyTypeBuilder().Save(Repository);
+            var poly2 = new PolyTypeBuilder().Save(Repository);
 
-            _repository.Delete(poly1);
+            Repository.Delete(poly1);
 
-            var allSaved = _repository.Query<PolyType>().List();
+            var allSaved = Repository.Query<PolyType>().List();
 
             allSaved.Count.Should().Be(1, "poly2 should have been deleted from the repository");
             allSaved[0].Id.Should().NotBe(poly1.Id);
@@ -98,10 +81,10 @@ namespace Reposify.Tests
         [Test]
         public virtual void Query_RetrieveAll()
         {
-            var poly1 = new PolyTypeBuilder().Save(_repository);
-            var poly2 = new PolyTypeBuilder().Save(_repository);
+            var poly1 = new PolyTypeBuilder().Save(Repository);
+            var poly2 = new PolyTypeBuilder().Save(Repository);
 
-            var allUsers = _repository.Query<PolyType>().List();
+            var allUsers = Repository.Query<PolyType>().List();
 
             allUsers.Count.Should().Be(2);
             allUsers.Should().Contain(poly1);
@@ -111,11 +94,11 @@ namespace Reposify.Tests
         [Test]
         public virtual void Query_RestrictStringPropertyEqual()
         {
-            var poly1 = new PolyTypeBuilder().With(u => u.String, "test1@user.net").Save(_repository);
-            var poly2 = new PolyTypeBuilder().With(u => u.String, "test2@user.net").Save(_repository);
+            var poly1 = new PolyTypeBuilder().With(u => u.String, "test1@user.net").Save(Repository);
+            var poly2 = new PolyTypeBuilder().With(u => u.String, "test2@user.net").Save(Repository);
 
             var specificUser =
-                _repository.Query<PolyType>()
+                Repository.Query<PolyType>()
                     .Filter(e => e.String == "test2@user.net")
                     .SingleOrDefault();
 
@@ -126,32 +109,32 @@ namespace Reposify.Tests
         [Test]
         public virtual void Query_RestrictComparisons()
         {
-            var poly1 = new PolyTypeBuilder().With(u => u.Int, 1).Save(_repository);
-            var poly2 = new PolyTypeBuilder().With(u => u.Int, 2).Save(_repository);
-            var poly3 = new PolyTypeBuilder().With(u => u.Int, 3).Save(_repository);
+            var poly1 = new PolyTypeBuilder().With(u => u.Int, 1).Save(Repository);
+            var poly2 = new PolyTypeBuilder().With(u => u.Int, 2).Save(Repository);
+            var poly3 = new PolyTypeBuilder().With(u => u.Int, 3).Save(Repository);
 
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Int < 2).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Int < 2).List();
                 result.Select(p => p.Id).Should().BeEquivalentTo(poly1.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Int <= 2).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Int <= 2).List();
                 result.Select(p => p.Id).Should().BeEquivalentTo(poly1.Id, poly2.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Int == 2).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Int == 2).List();
                 result.Select(p => p.Id).Should().BeEquivalentTo(poly2.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Int > 2).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Int > 2).List();
                 result.Select(p => p.Id).Should().BeEquivalentTo(poly3.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Int >= 2).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Int >= 2).List();
                 result.Select(p => p.Id).Should().BeEquivalentTo(poly3.Id, poly2.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Int != 2).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Int != 2).List();
                 result.Select(p => p.Id).Should().BeEquivalentTo(poly1.Id, poly3.Id);
             }
         }
@@ -159,32 +142,32 @@ namespace Reposify.Tests
         [Test]
         public virtual void Query_RestrictBooleans()
         {
-            var poly1 = new PolyTypeBuilder().With(u => u.Boolean, true).Save(_repository);
-            var poly2 = new PolyTypeBuilder().With(u => u.Boolean, false).Save(_repository);
-            var poly3 = new PolyTypeBuilder().With(u => u.Boolean, true).Save(_repository);
+            var poly1 = new PolyTypeBuilder().With(u => u.Boolean, true).Save(Repository);
+            var poly2 = new PolyTypeBuilder().With(u => u.Boolean, false).Save(Repository);
+            var poly3 = new PolyTypeBuilder().With(u => u.Boolean, true).Save(Repository);
 
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Boolean == true).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Boolean == true).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly3.Id, poly1.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Boolean == false).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Boolean == false).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly2.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Boolean).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Boolean).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly3.Id, poly1.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => !e.Boolean).List();
+                var result = Repository.Query<PolyType>().Filter(e => !e.Boolean).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly2.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Boolean != false).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Boolean != false).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly3.Id, poly1.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Boolean != true).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Boolean != true).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly2.Id);
             }
         }
@@ -192,24 +175,24 @@ namespace Reposify.Tests
         [Test]
         public virtual void Query_RestrictEnums()
         {
-            var poly1 = new PolyTypeBuilder().With(u => u.Enum, PolyType.Values.Val1).Save(_repository);
-            var poly2 = new PolyTypeBuilder().With(u => u.Enum, PolyType.Values.Val2).Save(_repository);
-            var poly3 = new PolyTypeBuilder().With(u => u.Enum, PolyType.Values.Val3).Save(_repository);
+            var poly1 = new PolyTypeBuilder().With(u => u.Enum, PolyType.Values.Val1).Save(Repository);
+            var poly2 = new PolyTypeBuilder().With(u => u.Enum, PolyType.Values.Val2).Save(Repository);
+            var poly3 = new PolyTypeBuilder().With(u => u.Enum, PolyType.Values.Val3).Save(Repository);
 
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Enum == PolyType.Values.Val2).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Enum == PolyType.Values.Val2).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly2.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Enum != PolyType.Values.Val2).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Enum != PolyType.Values.Val2).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly1.Id, poly3.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Enum > PolyType.Values.Val2).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Enum > PolyType.Values.Val2).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly3.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.Enum >= PolyType.Values.Val2).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.Enum >= PolyType.Values.Val2).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly2.Id, poly3.Id);
             }
         }
@@ -217,25 +200,25 @@ namespace Reposify.Tests
         [Test]
         public virtual void Query_RestrictNull()
         {
-            var poly1 = new PolyTypeBuilder().With(u => u.NullableString, "not null").With(u => u.NullableInt, 5   ).Save(_repository);
-            var poly2 = new PolyTypeBuilder().With(u => u.NullableString, null      ).With(u => u.NullableInt, 5   ).Save(_repository);
-            var poly3 = new PolyTypeBuilder().With(u => u.NullableString, "not null").With(u => u.NullableInt, 5   ).Save(_repository);
-            var poly4 = new PolyTypeBuilder().With(u => u.NullableString, "not null").With(u => u.NullableInt, null).Save(_repository);
+            var poly1 = new PolyTypeBuilder().With(u => u.NullableString, "not null").With(u => u.NullableInt, 5   ).Save(Repository);
+            var poly2 = new PolyTypeBuilder().With(u => u.NullableString, null      ).With(u => u.NullableInt, 5   ).Save(Repository);
+            var poly3 = new PolyTypeBuilder().With(u => u.NullableString, "not null").With(u => u.NullableInt, 5   ).Save(Repository);
+            var poly4 = new PolyTypeBuilder().With(u => u.NullableString, "not null").With(u => u.NullableInt, null).Save(Repository);
 
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.NullableString == null).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.NullableString == null).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly2.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.NullableString != null).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.NullableString != null).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly1.Id, poly3.Id, poly4.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.NullableInt == null).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.NullableInt == null).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly4.Id);
             }
             {
-                var result = _repository.Query<PolyType>().Filter(e => e.NullableInt != null).List();
+                var result = Repository.Query<PolyType>().Filter(e => e.NullableInt != null).List();
                 result.Select(e => e.Id).Should().BeEquivalentTo(poly1.Id, poly2.Id, poly3.Id);
             }
         }
@@ -243,16 +226,16 @@ namespace Reposify.Tests
         [Test]
         public virtual void Query_Ordering()
         {
-            var poly2 = new PolyTypeBuilder().With(u => u.Int, 2).Save(_repository);
-            var poly1 = new PolyTypeBuilder().With(u => u.Int, 1).Save(_repository);
-            var poly3 = new PolyTypeBuilder().With(u => u.Int, 3).Save(_repository);
+            var poly2 = new PolyTypeBuilder().With(u => u.Int, 2).Save(Repository);
+            var poly1 = new PolyTypeBuilder().With(u => u.Int, 1).Save(Repository);
+            var poly3 = new PolyTypeBuilder().With(u => u.Int, 3).Save(Repository);
 
             {
-                var result = _repository.Query<PolyType>().OrderBy(e => e.Int).List();
+                var result = Repository.Query<PolyType>().OrderBy(e => e.Int).List();
                 result.Select(e => e.Int).Should().BeInAscendingOrder(e => e);
             }
             {
-                var result = _repository.Query<PolyType>().OrderByDescending(e => e.Int).List();
+                var result = Repository.Query<PolyType>().OrderByDescending(e => e.Int).List();
                 result.Select(e => e.Int).Should().BeInDescendingOrder(e => e);
             }
         }
@@ -260,12 +243,12 @@ namespace Reposify.Tests
         [Test]
         public virtual void Query_Paging()
         {
-            var poly1 = new PolyTypeBuilder().With(u => u.Int, 1).Save(_repository);
-            var poly2 = new PolyTypeBuilder().With(u => u.Int, 2).Save(_repository);
-            var poly3 = new PolyTypeBuilder().With(u => u.Int, 3).Save(_repository);
-            var poly4 = new PolyTypeBuilder().With(u => u.Int, 4).Save(_repository);
+            var poly1 = new PolyTypeBuilder().With(u => u.Int, 1).Save(Repository);
+            var poly2 = new PolyTypeBuilder().With(u => u.Int, 2).Save(Repository);
+            var poly3 = new PolyTypeBuilder().With(u => u.Int, 3).Save(Repository);
+            var poly4 = new PolyTypeBuilder().With(u => u.Int, 4).Save(Repository);
 
-            var result = _repository.Query<PolyType>()
+            var result = Repository.Query<PolyType>()
                 .OrderBy(e => e.Int)
                 .Skip(1)
                 .Take(2)

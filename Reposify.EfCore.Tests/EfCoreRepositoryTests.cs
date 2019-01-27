@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Reposify.Database.Tests;
@@ -40,7 +41,7 @@ namespace Reposify.EfCore.Tests
             _handlers = new EfCoreHandlers().UsingHandlersFromAssemblyForType<EfCoreRepositoryTests>();
         }
 
-        protected override IRepository New()
+        protected override IDisposable New()
         {
             var dbContext = new TestsDbContext(_environment.Connection);
             return new EfCoreRepository(dbContext).UsingHandlers(_handlers).Open();

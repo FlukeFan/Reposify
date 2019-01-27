@@ -9,31 +9,30 @@ namespace Reposify.Tests.Testing
 {
     public class MemoryRepositoryTests : IRepositoryTests
     {
-        private MemoryRepository _repository;
+        private MemoryRepository Repository { get => (MemoryRepository)_disposable; }
 
-        protected override IRepository New()
+        protected override IDisposable New()
         {
-            _repository = new MemoryRepository(new ConstraintChecker());
-            return _repository;
+            return new MemoryRepository(new ConstraintChecker());
         }
 
         [Test]
         public virtual void Flush_DoesNotThrow()
         {
-            New().Flush();
+            Repository.Flush();
         }
 
         [Test]
         public override void DbQuery_IsImplemented()
         {
-            _repository.SetHandler<QuerySaveEntities>(q =>
+            Repository.SetHandler<QuerySaveEntities>(q =>
             {
                 foreach (var e in q.EntitiesToSave)
-                    _repository.Save(e);
+                    Repository.Save(e);
             });
 
-            _repository.SetHandler<QueryIn, IList<PolyType>>(q =>
-                _repository.Query<PolyType>().List()
+            Repository.SetHandler<QueryIn, IList<PolyType>>(q =>
+                Repository.Query<PolyType>().List()
                     .Where(p => q.IntValues.Contains(p.Id))
                     .ToList());
 
