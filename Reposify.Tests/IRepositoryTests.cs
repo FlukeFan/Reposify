@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -20,8 +21,8 @@ namespace Reposify.Tests
         [TearDown]
         public virtual void TearDown()
         {
-            using (_repository)
-                _repository = null;
+            ((IDisposable)_repository).Dispose();
+            _repository = null;
         }
 
         [Test]

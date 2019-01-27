@@ -4,7 +4,7 @@ using Reposify.Queries;
 
 namespace Reposify
 {
-    public interface IRepository : IDisposable
+    public interface IRepository
     {
         void            Execute(IDbExecution dbExecution);
         T               Execute<T>(IDbQuery<T> dbQuery);

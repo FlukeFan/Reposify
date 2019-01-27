@@ -5,7 +5,7 @@ using Reposify.Queries;
 
 namespace Reposify.Testing
 {
-    public class MemoryRepository : IRepository
+    public class MemoryRepository : IRepository, IDisposable
     {
         protected IDictionary<Type, Action<object>>         _executionHandlers  = new Dictionary<Type, Action<object>>();
         protected IDictionary<Type, Func<object, object>>   _queryHandlers      = new Dictionary<Type, Func<object, object>>();
