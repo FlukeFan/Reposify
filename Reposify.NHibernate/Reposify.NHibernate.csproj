@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.1.2-alpha">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="NHibernate" Version="5.2.3" />
+    <PackageReference Include="NHibernate" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>

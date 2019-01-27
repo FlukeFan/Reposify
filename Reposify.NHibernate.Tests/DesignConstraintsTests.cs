@@ -15,14 +15,8 @@ namespace Reposify.NHibernate.Tests
             NugetPackage.VerifyDependencies(packageFolder, name, new string[]
                 {
                     "Reposify:*",
-                    "NHibernate:4.0.0.4000",
+                    "NHibernate:5.1.0",
                 });
-
-            //TODO: verify what this used to do
-                //.VerifyProjectDependencies(@"..\..\..\Reposify.NHibernate\Reposify.NHibernate.csproj", new string[]
-                //{
-                //    "NHibernate:4.0.0.4000",
-                //});
         }
     }
 }

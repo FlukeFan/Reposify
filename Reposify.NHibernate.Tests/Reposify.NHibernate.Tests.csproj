@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Reposify.NHibernate\Reposify.NHibernate.csproj" />
     <ProjectReference Include="..\Reposify.Tests\Reposify.Tests.csproj" />
     <ProjectReference Include="..\Reposify.Database.Tests\Reposify.Database.Tests.csproj" />
