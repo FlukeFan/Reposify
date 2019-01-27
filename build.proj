@@ -9,6 +9,7 @@
     <ProjectsToBuild Include="Reposify.Tests/Reposify.Tests.csproj" />
     <ProjectsToBuild Include="Reposify.Database.Tests/Reposify.Database.Tests.csproj" />
     <ProjectsToBuild Include="Reposify.NHibernate/Reposify.NHibernate.csproj" />
+    <ProjectsToBuild Include="Reposify.NHibernate.Tests/Reposify.NHibernate.Tests.csproj" />
   </ItemGroup>
 
   <Target Name="BeforeBuild" BeforeTargets="Build">

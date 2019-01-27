@@ -34,6 +34,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reposify.Tests", "Reposify.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.Database.Tests", "Reposify.Database.Tests\Reposify.Database.Tests.csproj", "{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.NHibernate.Tests", "Reposify.NHibernate.Tests\Reposify.NHibernate.Tests.csproj", "{493F7995-2A8A-43D9-B597-E7FD54E4844F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,18 @@ Global
 		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Release|x64.Build.0 = Release|Any CPU
 		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Release|x86.ActiveCfg = Release|Any CPU
 		{2A04775B-D8CD-45FD-8C6E-DC6A5C062876}.Release|x86.Build.0 = Release|Any CPU
+		{493F7995-2A8A-43D9-B597-E7FD54E4844F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{493F7995-2A8A-43D9-B597-E7FD54E4844F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{493F7995-2A8A-43D9-B597-E7FD54E4844F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{493F7995-2A8A-43D9-B597-E7FD54E4844F}.Debug|x64.Build.0 = Debug|Any CPU
+		{493F7995-2A8A-43D9-B597-E7FD54E4844F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{493F7995-2A8A-43D9-B597-E7FD54E4844F}.Debug|x86.Build.0 = Debug|Any CPU
+		{493F7995-2A8A-43D9-B597-E7FD54E4844F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{493F7995-2A8A-43D9-B597-E7FD54E4844F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{493F7995-2A8A-43D9-B597-E7FD54E4844F}.Release|x64.ActiveCfg = Release|Any CPU
+		{493F7995-2A8A-43D9-B597-E7FD54E4844F}.Release|x64.Build.0 = Release|Any CPU
+		{493F7995-2A8A-43D9-B597-E7FD54E4844F}.Release|x86.ActiveCfg = Release|Any CPU
+		{493F7995-2A8A-43D9-B597-E7FD54E4844F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
