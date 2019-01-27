@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.NHibernate.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.EfCore", "Reposify.EfCore\Reposify.EfCore.csproj", "{21A8F39C-2BB0-4ACD-93C9-0B08A77EF4FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reposify.EfCore.Tests", "Reposify.EfCore.Tests\Reposify.EfCore.Tests.csproj", "{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -144,6 +146,18 @@ Global
 		{21A8F39C-2BB0-4ACD-93C9-0B08A77EF4FE}.Release|x64.Build.0 = Release|Any CPU
 		{21A8F39C-2BB0-4ACD-93C9-0B08A77EF4FE}.Release|x86.ActiveCfg = Release|Any CPU
 		{21A8F39C-2BB0-4ACD-93C9-0B08A77EF4FE}.Release|x86.Build.0 = Release|Any CPU
+		{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}.Debug|x64.Build.0 = Debug|Any CPU
+		{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}.Debug|x86.Build.0 = Debug|Any CPU
+		{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}.Release|x64.ActiveCfg = Release|Any CPU
+		{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}.Release|x64.Build.0 = Release|Any CPU
+		{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}.Release|x86.ActiveCfg = Release|Any CPU
+		{50BB5B1E-472F-4F2E-93E6-0F9957ECF820}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

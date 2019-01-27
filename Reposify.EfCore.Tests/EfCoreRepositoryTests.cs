@@ -1,24 +1,33 @@
-﻿using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
 using Reposify.Database.Tests;
 using Reposify.Tests;
 
 namespace Reposify.EfCore.Tests
 {
+    [TestFixture]
     public class EfCoreRepositoryTests : IRepositoryTests
     {
         public class TestsDbContext : DbContext
         {
-            public TestsDbContext(string connectionString) : base(connectionString)
+            public TestsDbContext(string connectionString) : base(BuildOptions(connectionString))
             {
             }
 
-            protected override void OnModelCreating(DbModelBuilder modelBuilder)
+            public static DbContextOptions BuildOptions(string connectionString)
             {
-                modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+                return new DbContextOptionsBuilder()
+                    .UseSqlServer(connectionString)
+                    .Options;
+            }
 
+            protected override void OnModelCreating(ModelBuilder modelBuilder)
+            {
                 var polyType = modelBuilder.Entity<PolyType>();
-                polyType.HasOptional(p => p.SubType).WithOptionalPrincipal().Map(m => m.MapKey("SubType"));
+                polyType.HasOne(e => e.SubType);
+                var props = polyType.Metadata.GetProperties().ToList();
+                props.Where(p => p.Name == "SubTypeId").Single().Relational().ColumnName = "SubType";
             }
         }
 
