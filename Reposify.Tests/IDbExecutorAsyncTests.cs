@@ -18,10 +18,10 @@ namespace Reposify.Tests
             var poly3 = new PolyTypeBuilder().With(p => p.String, "poly3").Value();
 
             var save = new QuerySaveEntities { EntitiesToSave = new[] { poly1, poly2, poly3 } };
-            await DbExecutorAsync.Execute(save);
+            await DbExecutorAsync.ExecuteAsync(save);
 
             var query = new QueryIn { IntValues = new[] { poly1.Id, poly3.Id } };
-            var entitiesWithId = await DbExecutorAsync.Execute(query);
+            var entitiesWithId = await DbExecutorAsync.ExecuteAsync(query);
 
             entitiesWithId.Select(e => e.String).Should().BeEquivalentTo("poly1", "poly3");
         }

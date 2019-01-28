@@ -4,7 +4,7 @@ namespace Reposify
 {
     public interface IDbExecutorAsync
     {
-        Task    Execute(IDbExecution dbExecution);
-        Task<T> Execute<T>(IDbQuery<T> dbQuery);
+        Task    ExecuteAsync(IDbExecution dbExecution);
+        Task<T> ExecuteAsync<T>(IDbQuery<T> dbQuery);
     }
 }
