@@ -5,7 +5,7 @@ using Reposify.Queries;
 
 namespace Reposify.Testing
 {
-    public class MemoryRepository : IRepository, IQueryableRepository, IDisposable
+    public class MemoryRepository : IRepository, IDbLinqExecutor, ILinqQueryable, IDisposable
     {
         protected IDictionary<Type, Action<object>>         _executionHandlers  = new Dictionary<Type, Action<object>>();
         protected IDictionary<Type, Func<object, object>>   _queryHandlers      = new Dictionary<Type, Func<object, object>>();
@@ -154,13 +154,13 @@ namespace Reposify.Testing
         {
         }
 
-        TResult IQueryableRepository.Execute<TEntity, TResult>(IDbLinq<TEntity, TResult> query)
+        TResult IDbLinqExecutor.Execute<TEntity, TResult>(IDbLinq<TEntity, TResult> query)
         {
-            IQueryableRepository qr = this;
+            ILinqQueryable qr = this;
             return query.Execute(qr.Query<TEntity>());
         }
 
-        IQueryable<T> IQueryableRepository.Query<T>()
+        IQueryable<T> ILinqQueryable.Query<T>()
         {
             return _entities
                 .Where(e => typeof(T).IsAssignableFrom(e.GetType()))

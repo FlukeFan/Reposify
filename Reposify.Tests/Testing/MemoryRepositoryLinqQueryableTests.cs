@@ -3,7 +3,7 @@ using Reposify.Testing;
 
 namespace Reposify.Tests.Testing
 {
-    public class MemoryRepositoryQueryableTests : IQueryableRepositoryTests
+    public class MemoryRepositoryLinqQueryableTests : ILinqQueryableTests
     {
         protected override IDisposable New()
         {
