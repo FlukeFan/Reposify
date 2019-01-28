@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Reposify.Queries;
 
 namespace Reposify.EfCore
 {
-    public class EfCoreRepository : IIdentityMapRepository, IDisposable
+    public class EfCoreRepository : IIdentityMapRepository, ILinqQueryable, IDbLinqExecutor, IDisposable
     {
         protected DbContext                 _dbContext;
         protected IDbContextTransaction     _transaction;
@@ -74,34 +72,14 @@ namespace Reposify.EfCore
         {
         }
 
-        public virtual Query<T> Query<T>() where T : class, IEntity
+        public IQueryable<T> Query<T>() where T : class
         {
-            return new Query<T>(this);
+            return _dbContext.Set<T>();
         }
 
-        public virtual IList<T> Satisfy<T>(Query<T> query) where T : class, IEntity
+        public TResult Execute<TEntity, TResult>(IDbLinq<TEntity, TResult> query) where TEntity : class
         {
-            var dbSet = (IEnumerable<T>)_dbContext.Set<T>();
-
-            foreach (var restriction in query.Restrictions)
-            {
-                var expression = Where.Lambda<T>(restriction).Compile();
-                dbSet = dbSet.Where(expression);
-            }
-
-            foreach (var order in query.Orders)
-            {
-                var processor = Ordering.Lambda<T>(order).Compile();
-                dbSet = processor(dbSet);
-            }
-
-            if (query.SkipCount.HasValue)
-                dbSet = dbSet.Skip(query.SkipCount.Value);
-
-            if (query.TakeCount.HasValue)
-                dbSet = dbSet.Take(query.TakeCount.Value);
-
-            return dbSet.ToList();
+            return query.Execute(Query<TEntity>());
         }
 
         public virtual void Dispose()

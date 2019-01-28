@@ -32,7 +32,7 @@ namespace Reposify.Tests.Testing
             });
 
             Repository.SetHandler<QueryIn, IList<PolyType>>(q =>
-                Repository.Query<PolyType>().List()
+                Repository.Query<PolyType>()
                     .Where(p => q.IntValues.Contains(p.Id))
                     .ToList());
 

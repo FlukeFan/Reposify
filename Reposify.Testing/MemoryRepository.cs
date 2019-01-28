@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Reposify.Queries;
 
 namespace Reposify.Testing
 {
@@ -89,31 +88,8 @@ namespace Reposify.Testing
 
         public IList<T> All<T>() where T : class, IEntity
         {
-            return Query<T>().List();
-        }
-
-        public virtual Query<T> Query<T>() where T : class, IEntity
-        {
-            return new Query<T>(this);
-        }
-
-        public virtual IList<T> Satisfy<T>(Query<T> query) where T : class, IEntity
-        {
-            var entities = _entities.Where(e => typeof(T).IsAssignableFrom(e.GetType())).Cast<T>();
-
-            foreach (var restriction in query.Restrictions)
-                entities = Filter(entities, restriction);
-
-            foreach (var order in query.Orders)
-                entities = OrderBy(entities, order);
-
-            if (query.SkipCount.HasValue)
-                entities = entities.Skip(query.SkipCount.Value);
-
-            if (query.TakeCount.HasValue)
-                entities = entities.Take(query.TakeCount.Value);
-
-            return entities.ToList();
+            ILinqQueryable qr = this;
+            return qr.Query<T>().ToList();
         }
 
         public void ShouldContain(IEntity entity)
@@ -136,36 +112,21 @@ namespace Reposify.Testing
                 throw new Exception(string.Format("Could not find entity with id {0} and type {1} in the Repository", id, typeof(T)));
         }
 
-        private static IEnumerable<T> Filter<T>(IEnumerable<T> entities, Where restriction)
-        {
-            var expression = Where.Lambda<T>(restriction).Compile();
-            entities = entities.Where(expression);
-            return entities;
-        }
-
-        private static IEnumerable<T> OrderBy<T>(IEnumerable<T> entities, Ordering order)
-        {
-            var processor = Ordering.Lambda<T>(order).Compile();
-            entities = processor(entities);
-            return entities;
-        }
-
-        public void Dispose()
-        {
-        }
-
-        TResult IDbLinqExecutor.Execute<TEntity, TResult>(IDbLinq<TEntity, TResult> query)
-        {
-            ILinqQueryable qr = this;
-            return query.Execute(qr.Query<TEntity>());
-        }
-
-        IQueryable<T> ILinqQueryable.Query<T>()
+        public IQueryable<T> Query<T>() where T : class
         {
             return _entities
                 .Where(e => typeof(T).IsAssignableFrom(e.GetType()))
                 .Cast<T>()
                 .AsQueryable();
+        }
+
+        public TResult Execute<TEntity, TResult>(IDbLinq<TEntity, TResult> query) where TEntity : class
+        {
+            return query.Execute(Query<TEntity>());
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

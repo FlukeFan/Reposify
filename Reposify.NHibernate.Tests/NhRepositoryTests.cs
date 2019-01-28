@@ -45,9 +45,14 @@ namespace Reposify.NHibernate.Tests
             _handlers = new NhHandlers().UsingHandlersFromAssemblyForType<NhRepositoryTests>();
         }
 
-        protected override IDisposable New()
+        public static NhRepository NewNhRepository()
         {
             return NhRepository.Open(_sessionFactory, _handlers);
+        }
+
+        protected override IDisposable New()
+        {
+            return NewNhRepository();
         }
 
         private NhRepository Repository { get => (NhRepository)_disposable; }

@@ -4,6 +4,6 @@ namespace Reposify
 {
     public interface ILinqQueryable
     {
-        IQueryable<T> Query<T>();
+        IQueryable<T> Query<T>() where T : class;
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IDbLinqExecutor
     {
-        TResult Execute<TEntity, TResult>(IDbLinq<TEntity, TResult> query);
+        TResult Execute<TEntity, TResult>(IDbLinq<TEntity, TResult> query) where TEntity : class;
     }
 }

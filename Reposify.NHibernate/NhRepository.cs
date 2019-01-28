@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
-using Reposify.Queries;
 
 namespace Reposify.NHibernate
 {
-    public class NhRepository : IIdentityMapRepository, IDisposable
+    public class NhRepository : IIdentityMapRepository, ILinqQueryable, IDbLinqExecutor, IDisposable
     {
         /// <summary> creates a new session and begins a new transaction </summary>
         public static NhRepository Open(ISessionFactory sessionFactory, NhHandlers handlers = null)
@@ -85,16 +84,14 @@ namespace Reposify.NHibernate
             _session.Clear();
         }
 
-        public virtual Query<T> Query<T>() where T : class, IEntity
+        public IQueryable<T> Query<T>() where T : class
         {
-            return new Query<T>(this);
+            return _session.Query<T>();
         }
 
-        public virtual IList<T> Satisfy<T>(Query<T> query) where T : class, IEntity
+        public TResult Execute<TEntity, TResult>(IDbLinq<TEntity, TResult> query) where TEntity : class
         {
-            var nhCriteria = NhCriteria.For(query);
-            var criteria = nhCriteria.CreateCriteria(_session);
-            return criteria.List<T>();
+            return query.Execute(Query<TEntity>());
         }
 
         public virtual void Dispose()

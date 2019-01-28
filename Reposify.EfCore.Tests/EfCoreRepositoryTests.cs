@@ -41,10 +41,15 @@ namespace Reposify.EfCore.Tests
             _handlers = new EfCoreHandlers().UsingHandlersFromAssemblyForType<EfCoreRepositoryTests>();
         }
 
-        protected override IDisposable New()
+        public static EfCoreRepository NewEfCoreRepository()
         {
             var dbContext = new TestsDbContext(_environment.Connection);
             return new EfCoreRepository(dbContext).UsingHandlers(_handlers).Open();
+        }
+
+        protected override IDisposable New()
+        {
+            return EfCoreRepositoryTests.NewEfCoreRepository();
         }
 
         public override void TearDown()
