@@ -5,10 +5,8 @@
         public NhHandlers UsingHandlersFromAssemblyForType<T>()
         {
             AddHandlersFromAssemblyForType<T>(
-                isExecutionHandler: t => t == typeof(INhExecutionHandler<>),
-                executionHandlerInterfaceName: "INhExecutionHandler",
-                isQueryHandler: t => t == typeof(INhQueryHandler<,>),
-                queryHandlerInterfaceName: "INhQueryHandler");
+                executionHandlerInterface: typeof(INhExecutionHandler<>),
+                queryHandlerInterface: typeof(INhQueryHandler<,>));
 
             return this;
         }

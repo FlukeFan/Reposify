@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Reposify
 {
@@ -15,10 +16,8 @@ namespace Reposify
         public Func<Type, object> HandlerFactory = t => Activator.CreateInstance(t);
 
         protected void AddHandlersFromAssemblyForType<T>(
-            Func<Type, bool>    isExecutionHandler,
-            string              executionHandlerInterfaceName,
-            Func<Type, bool>    isQueryHandler,
-            string              queryHandlerInterfaceName)
+            Type executionHandlerInterface,
+            Type queryHandlerInterface)
         {
             var assembly = typeof(T).Assembly;
             var types = assembly.GetTypes()
@@ -34,57 +33,59 @@ namespace Reposify
 
                     var genericType = intrface.GetGenericTypeDefinition();
 
-                    if (isExecutionHandler(genericType))
+                    if (genericType == executionHandlerInterface)
                         _executionHandlers[intrface.GenericTypeArguments[0]] = type;
 
-                    if (isQueryHandler(genericType))
+                    if (genericType == queryHandlerInterface)
                         _queryHandlers[intrface.GenericTypeArguments[0]] = type;
                 }
             }
 
-            _executionHandlerInterfaceName = executionHandlerInterfaceName;
-            _queryHandlerInterfaceName = queryHandlerInterfaceName;
+            _executionHandlerInterfaceName = executionHandlerInterface.Name;
+            _queryHandlerInterfaceName = queryHandlerInterface.Name;
         }
 
         public virtual void Execute(IDbExecutor executor, IDbExecution dbExecution)
         {
-            if (dbExecution == null)
-                throw new Exception("attempt to execute null query");
-
-            var type = dbExecution.GetType();
-
-            if (!_executionHandlers.ContainsKey(type))
-                throw new Exception($"no handler found for {type} - ensure there is a handler registered that implements {_executionHandlerInterfaceName}<{type.Name}>");
-
-            var handlerType = _executionHandlers[type];
+            var handlerType = GetHandlerType(dbExecution, _executionHandlers, _executionHandlerInterfaceName);
             var handler = HandlerFactory(handlerType);
-            var execute = handlerType.GetMethod("Execute");
-
-            if (execute == null)
-                execute = handlerType.GetInterfaces().Where(i => i.Name.StartsWith(_executionHandlerInterfaceName)).Single().GetMethod("Execute");
+            var execute = GetExecuteMethod(handlerType, _executionHandlerInterfaceName, "Execute");
 
             execute.Invoke(handler, new object[] { executor, dbExecution });
         }
 
         public virtual TResult Execute<TResult>(IDbExecutor executor, IDbQuery<TResult> dbQuery)
         {
-            if (dbQuery == null)
-                throw new Exception("attempt to execute null query");
-
-            var type = dbQuery.GetType();
-
-            if (!_queryHandlers.ContainsKey(type))
-                throw new Exception($"no handler found for {type} - ensure there is a handler registered that implements {_queryHandlerInterfaceName}<{type.Name}>");
-
-            var handlerType = _queryHandlers[type];
+            var handlerType = GetHandlerType(dbQuery, _queryHandlers, _queryHandlerInterfaceName);
             var handler = HandlerFactory(handlerType);
-            var execute = handlerType.GetMethod("Execute");
-
-            if (execute == null)
-                execute = handlerType.GetInterfaces().Where(i => i.Name.StartsWith(_queryHandlerInterfaceName)).Single().GetMethod("Execute");
+            var execute = GetExecuteMethod(handlerType, _queryHandlerInterfaceName, "Execute");
 
             var result = execute.Invoke(handler, new object[] { executor, dbQuery });
             return (TResult)result;
+        }
+
+        protected virtual Type GetHandlerType(object action, IDictionary<Type, Type> handlers, string interfaceName)
+        {
+            if (action == null)
+                throw new Exception("attempt to execute null query");
+
+            var type = action.GetType();
+
+            if (!handlers.ContainsKey(type))
+                throw new Exception($"no handler found for {type} - ensure there is a handler registered that implements {interfaceName}<{type.Name}>");
+
+            var handlerType = handlers[type];
+            return handlerType;
+        }
+
+        protected virtual MethodInfo GetExecuteMethod(Type handlerType, string interfaceName, string methodName)
+        {
+            var execute = handlerType.GetMethod(methodName);
+
+            if (execute == null)
+                execute = handlerType.GetInterfaces().Where(i => i.Name.StartsWith(interfaceName)).Single().GetMethod(methodName);
+
+            return execute;
         }
     }
 }
