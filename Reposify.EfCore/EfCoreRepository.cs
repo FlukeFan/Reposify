@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Reposify.EfCore
 {
-    public class EfCoreRepository : IIdentityMapRepository, IDbExecutor, ILinqQueryable, IDbLinqExecutor, IDisposable
+    public class EfCoreRepository :
+        IIdentityMapRepository,
+        IRepositoryAsync,
+        IDbExecutor,
+        ILinqQueryable,
+        IDbLinqExecutor,
+        IDisposable
     {
         protected DbContext                 _dbContext;
         protected IDbContextTransaction     _transaction;
@@ -70,6 +77,24 @@ namespace Reposify.EfCore
 
         public virtual void Clear()
         {
+        }
+
+        async Task<T> IRepositoryAsync.SaveAsync<T>(T entity)
+        {
+            await _dbContext.Set<T>().AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
+        }
+
+        Task<T> IRepositoryAsync.LoadAsync<T>(object id)
+        {
+            return _dbContext.Set<T>().FindAsync(id);
+        }
+
+        Task IRepositoryAsync.DeleteAsync<T>(T entity)
+        {
+            _dbContext.Set<T>().Remove(entity);
+            return _dbContext.SaveChangesAsync();
         }
 
         public IQueryable<T> Query<T>() where T : class

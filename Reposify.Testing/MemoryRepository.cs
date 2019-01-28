@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Reposify.Testing
 {
-    public class MemoryRepository : IRepository, IDbExecutor, IDbLinqExecutor, ILinqQueryable, IDisposable
+    public class MemoryRepository :
+        IRepository,
+        IRepositoryAsync,
+        IDbExecutor,
+        IDbLinqExecutor,
+        ILinqQueryable,
+        IDisposable
     {
         protected IDictionary<Type, Action<object>>         _executionHandlers  = new Dictionary<Type, Action<object>>();
         protected IDictionary<Type, Func<object, object>>   _queryHandlers      = new Dictionary<Type, Func<object, object>>();
@@ -84,6 +91,23 @@ namespace Reposify.Testing
         public virtual void Flush()
         {
             // no externally visible behaviour to implement
+        }
+
+
+        Task<T> IRepositoryAsync.SaveAsync<T>(T entity)
+        {
+            return Task.FromResult(Save(entity));
+        }
+
+        Task<T> IRepositoryAsync.LoadAsync<T>(object id)
+        {
+            return Task.FromResult(Load<T>(id));
+        }
+
+        Task IRepositoryAsync.DeleteAsync<T>(T entity)
+        {
+            Delete(entity);
+            return Task.CompletedTask;
         }
 
         public IList<T> All<T>() where T : class, IEntity

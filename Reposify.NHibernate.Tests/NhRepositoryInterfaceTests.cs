@@ -3,7 +3,12 @@ using Reposify.Tests;
 
 namespace Reposify.NHibernate.Tests
 {
-    public class NhRepositoryDExecutorTests : IDbExecutorTests
+    public class NhRepositoryAsyncTests : IRepositoryAsyncTests
+    {
+        protected override IDisposable New() { return NhRepositoryTests.NewNhRepository(); }
+    }
+
+    public class NhRepositoryDbExecutorTests : IDbExecutorTests
     {
         protected override IDisposable New() { return NhRepositoryTests.NewNhRepository(); }
     }

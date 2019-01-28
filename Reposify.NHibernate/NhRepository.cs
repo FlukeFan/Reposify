@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using NHibernate;
 
 namespace Reposify.NHibernate
 {
-    public class NhRepository : IIdentityMapRepository, IDbExecutor, ILinqQueryable, IDbLinqExecutor, IDisposable
+    public class NhRepository :
+        IIdentityMapRepository,
+        IRepositoryAsync,
+        IDbExecutor,
+        ILinqQueryable,
+        IDbLinqExecutor,
+        IDisposable
     {
         /// <summary> creates a new session and begins a new transaction </summary>
         public static NhRepository Open(ISessionFactory sessionFactory, NhHandlers handlers = null)
@@ -82,6 +89,22 @@ namespace Reposify.NHibernate
         public virtual void Clear()
         {
             _session.Clear();
+        }
+
+        async Task<T> IRepositoryAsync.SaveAsync<T>(T entity)
+        {
+            await _session.SaveAsync(entity);
+            return entity;
+        }
+
+        Task<T> IRepositoryAsync.LoadAsync<T>(object id)
+        {
+            return _session.LoadAsync<T>(id);
+        }
+
+        Task IRepositoryAsync.DeleteAsync<T>(T entity)
+        {
+            return _session.DeleteAsync(entity);
         }
 
         public IQueryable<T> Query<T>() where T : class

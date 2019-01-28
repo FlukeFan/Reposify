@@ -6,6 +6,11 @@ using Reposify.Testing;
 
 namespace Reposify.Tests.Testing
 {
+    public class MemoryRepositoryAsyncTests : IRepositoryAsyncTests
+    {
+        protected override IDisposable New() { return new MemoryRepository(new ConstraintChecker()); }
+    }
+
     public class MemoryRepositoryDbLinqExecutorTests : IDbLinqExecutorTests
     {
         protected override IDisposable New() { return new MemoryRepository(new ConstraintChecker()); }
