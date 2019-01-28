@@ -1,38 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using NHibernate;
-using NHibernate.Cfg;
 using Reposify.Queries;
 
 namespace Reposify.NHibernate
 {
     public class NhRepository : IIdentityMapRepository, IDisposable
     {
-        public static ISessionFactory SessionFactory { get; protected set; }
-
-        public static void Init(ISessionFactory sessionFactory)
+        /// <summary> creates a new session and begins a new transaction </summary>
+        public static NhRepository Open(ISessionFactory sessionFactory, NhHandlers handlers = null)
         {
-            SessionFactory = sessionFactory;
-        }
+            var session = sessionFactory.OpenSession();
+            var repository = new NhRepository(session);
 
-        public static void Init(Configuration configuration)
-        {
-            Init(configuration.BuildSessionFactory());
+            if (handlers != null)
+                repository.UsingHandlers(handlers);
+
+            return repository.BeginTransaction();
         }
 
         protected ISession          _session;
         protected ITransaction      _transaction;
         protected NhHandlers        _handlers       = new NhHandlers();
 
+        public NhRepository(ISession session)
+        {
+            _session = session;
+        }
+
         public ISession     Session     { get { return _session; } }
         public ITransaction Transaction { get { return _transaction; } }
 
-        public virtual NhRepository Open()
+        public virtual NhRepository BeginTransaction()
         {
-            if (SessionFactory == null)
-                throw new Exception("Call Init() once to setup the session factory");
-
-            _session = SessionFactory.OpenSession();
             _transaction = _session.BeginTransaction();
             return this;
         }
@@ -41,7 +41,6 @@ namespace Reposify.NHibernate
         {
             _transaction.Commit();
             _transaction = null;
-            _session = null;
         }
 
         public NhRepository UsingHandlers(NhHandlers handlers)

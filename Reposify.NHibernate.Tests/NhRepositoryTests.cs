@@ -15,7 +15,8 @@ namespace Reposify.NHibernate.Tests
 {
     public class NhRepositoryTests : IRepositoryTests
     {
-        private static NhHandlers _handlers;
+        private static ISessionFactory  _sessionFactory;
+        private static NhHandlers       _handlers;
 
         static NhRepositoryTests()
         {
@@ -40,13 +41,13 @@ namespace Reposify.NHibernate.Tests
                 });
             });
 
-            NhRepository.Init(config);
+            _sessionFactory = config.BuildSessionFactory();
             _handlers = new NhHandlers().UsingHandlersFromAssemblyForType<NhRepositoryTests>();
         }
 
         protected override IDisposable New()
         {
-            return new NhRepository().UsingHandlers(_handlers).Open();
+            return NhRepository.Open(_sessionFactory, _handlers);
         }
 
         private NhRepository Repository { get => (NhRepository)_disposable; }
