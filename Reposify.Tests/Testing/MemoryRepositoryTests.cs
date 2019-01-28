@@ -7,12 +7,24 @@ namespace Reposify.Tests.Testing
 {
     public class MemoryRepositoryTests : IRepositoryTests
     {
-        private MemoryRepository Repository { get => (MemoryRepository)_disposable; }
+        private static MemoryHandlers _handlers;
+
+        static MemoryRepositoryTests()
+        {
+            _handlers = new MemoryHandlers().UsingHandlersFromAssemblyForType<MemoryRepositoryTests>();
+        }
+
+        public static MemoryRepository NewMemoryRepository()
+        {
+            return new MemoryRepository(new ConstraintChecker()).UsingHandlers(_handlers);
+        }
 
         protected override IDisposable New()
         {
             return new MemoryRepository(new ConstraintChecker());
         }
+
+        private MemoryRepository Repository { get => (MemoryRepository)_disposable; }
 
         [Test]
         public virtual void Flush_DoesNotThrow()

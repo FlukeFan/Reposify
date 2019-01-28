@@ -13,11 +13,9 @@ namespace Reposify.Testing
         ILinqQueryable,
         IDisposable
     {
-        protected IDictionary<Type, Action<object>>         _executionHandlers  = new Dictionary<Type, Action<object>>();
-        protected IDictionary<Type, Func<object, object>>   _queryHandlers      = new Dictionary<Type, Func<object, object>>();
-
-        protected ConstraintChecker                         _constraintChecker;
-        protected IList<IEntity>                            _entities           = new List<IEntity>();
+        protected MemoryHandlers    _handlers           = new MemoryHandlers();
+        protected ConstraintChecker _constraintChecker;
+        protected IList<IEntity>    _entities           = new List<IEntity>();
 
         protected int lastId = 101;
 
@@ -26,40 +24,20 @@ namespace Reposify.Testing
             _constraintChecker = constraintChecker;
         }
 
-        public virtual void SetHandler<T>(Action<T> handler) where T : IDbExecution
+        public MemoryRepository UsingHandlers(MemoryHandlers handlers)
         {
-            _executionHandlers[typeof(T)] = q => handler((T)q);
+            _handlers = handlers;
+            return this;
         }
 
-        public virtual void SetHandler<TQuery, TResult>(Func<TQuery, TResult> handler) where TQuery : IDbQuery<TResult>
+        public void Execute(IDbExecution dbExecution)
         {
-            _queryHandlers[typeof(TQuery)] = q => handler((TQuery)q);
+            _handlers.Execute(this, dbExecution);
         }
 
-        public virtual void Execute(IDbExecution dbExecution)
+        public T Execute<T>(IDbQuery<T> dbQuery)
         {
-            if (dbExecution == null)
-                throw new Exception("attempt to execute null query");
-
-            var type = dbExecution.GetType();
-
-            if (!_executionHandlers.ContainsKey(type))
-                throw new Exception($"no handler has been set for {type} - use SetHandler<T>() to set a handler");
-
-            _executionHandlers[type](dbExecution);
-        }
-
-        public virtual T Execute<T>(IDbQuery<T> dbQuery)
-        {
-            if (dbQuery == null)
-                throw new Exception("attempt to execute null query");
-
-            var type = dbQuery.GetType();
-
-            if (!_queryHandlers.ContainsKey(type))
-                throw new Exception($"no handler has been set for {type} - use SetHandler<T>() to set a handler");
-
-            return (T)_queryHandlers[type](dbQuery);
+            return _handlers.Execute(this, dbQuery);
         }
 
         public virtual T Save<T>(T entity) where T : class, IEntity
