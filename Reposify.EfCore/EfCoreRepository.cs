@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Reposify.EfCore
 {
-    public class EfCoreRepository : IIdentityMapRepository, ILinqQueryable, IDbLinqExecutor, IDisposable
+    public class EfCoreRepository : IIdentityMapRepository, IDbExecutor, ILinqQueryable, IDbLinqExecutor, IDisposable
     {
         protected DbContext                 _dbContext;
         protected IDbContextTransaction     _transaction;

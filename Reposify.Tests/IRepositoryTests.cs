@@ -10,22 +10,6 @@ namespace Reposify.Tests
         private ILinqQueryable  LinqQueryable   { get => (ILinqQueryable)_disposable; }
 
         [Test]
-        public virtual void DbQuery_IsImplemented()
-        {
-            var poly1 = new PolyTypeBuilder().With(p => p.String, "poly1").Value();
-            var poly2 = new PolyTypeBuilder().With(p => p.String, "poly2").Value();
-            var poly3 = new PolyTypeBuilder().With(p => p.String, "poly3").Value();
-
-            var save = new QuerySaveEntities { EntitiesToSave = new[] { poly1, poly2, poly3 } };
-            Repository.Execute(save);
-
-            var query = new QueryIn { IntValues = new[] { poly1.Id, poly3.Id } };
-            var entitiesWithId = Repository.Execute(query);
-
-            entitiesWithId.Select(e => e.String).Should().BeEquivalentTo("poly1", "poly3");
-        }
-
-        [Test]
         public virtual void Save_SetsId()
         {
             var poly = new PolyTypeBuilder().Value();

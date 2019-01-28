@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Reposify.Testing
 {
-    public class MemoryRepository : IRepository, IDbLinqExecutor, ILinqQueryable, IDisposable
+    public class MemoryRepository : IRepository, IDbExecutor, IDbLinqExecutor, ILinqQueryable, IDisposable
     {
         protected IDictionary<Type, Action<object>>         _executionHandlers  = new Dictionary<Type, Action<object>>();
         protected IDictionary<Type, Func<object, object>>   _queryHandlers      = new Dictionary<Type, Func<object, object>>();

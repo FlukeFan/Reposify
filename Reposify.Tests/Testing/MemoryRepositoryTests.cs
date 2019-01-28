@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using Reposify.Testing;
@@ -20,23 +18,6 @@ namespace Reposify.Tests.Testing
         public virtual void Flush_DoesNotThrow()
         {
             Repository.Flush();
-        }
-
-        [Test]
-        public override void DbQuery_IsImplemented()
-        {
-            Repository.SetHandler<QuerySaveEntities>(q =>
-            {
-                foreach (var e in q.EntitiesToSave)
-                    Repository.Save(e);
-            });
-
-            Repository.SetHandler<QueryIn, IList<PolyType>>(q =>
-                Repository.Query<PolyType>()
-                    .Where(p => q.IntValues.Contains(p.Id))
-                    .ToList());
-
-            base.DbQuery_IsImplemented();
         }
 
         [Test]

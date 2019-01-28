@@ -4,7 +4,7 @@ using NHibernate;
 
 namespace Reposify.NHibernate
 {
-    public class NhRepository : IIdentityMapRepository, ILinqQueryable, IDbLinqExecutor, IDisposable
+    public class NhRepository : IIdentityMapRepository, IDbExecutor, ILinqQueryable, IDbLinqExecutor, IDisposable
     {
         /// <summary> creates a new session and begins a new transaction </summary>
         public static NhRepository Open(ISessionFactory sessionFactory, NhHandlers handlers = null)
