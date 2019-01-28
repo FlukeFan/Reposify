@@ -41,8 +41,8 @@ namespace Reposify
                 }
             }
 
-            _executionHandlerInterfaceName = executionHandlerInterface.Name;
-            _queryHandlerInterfaceName = queryHandlerInterface.Name;
+            _executionHandlerInterfaceName = executionHandlerInterface.Name.Split('`')[0];
+            _queryHandlerInterfaceName = queryHandlerInterface.Name.Split('`')[0];
         }
 
         public virtual void Execute(IDbExecutor executor, IDbExecution dbExecution)
