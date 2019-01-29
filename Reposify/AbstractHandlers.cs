@@ -41,16 +41,16 @@ namespace Reposify
                     var genericType = intrface.GetGenericTypeDefinition();
 
                     if (executionHandlerInterface != null && genericType == executionHandlerInterface)
-                        _executionHandlers[intrface.GenericTypeArguments[0]] = type;
+                        AddHandler(_executionHandlers, intrface.GenericTypeArguments[0], type);
 
                     if (queryHandlerInterface != null && genericType == queryHandlerInterface)
-                        _queryHandlers[intrface.GenericTypeArguments[0]] = type;
+                        AddHandler(_queryHandlers, intrface.GenericTypeArguments[0], type);
 
                     if (executionAsyncHandlerInterface != null && genericType == executionAsyncHandlerInterface)
-                        _executionAsyncHandlers[intrface.GenericTypeArguments[0]] = type;
+                        AddHandler(_executionAsyncHandlers, intrface.GenericTypeArguments[0], type);
 
                     if (queryAsyncHandlerInterface != null && genericType == queryAsyncHandlerInterface)
-                        _queryAsyncHandlers[intrface.GenericTypeArguments[0]] = type;
+                        AddHandler(_queryAsyncHandlers, intrface.GenericTypeArguments[0], type);
                 }
             }
 
@@ -104,6 +104,14 @@ namespace Reposify
 
             var result = execute.Invoke(handler, new object[] { executor, dbQuery });
             return (Task<TResult>)result;
+        }
+
+        protected virtual void AddHandler(IDictionary<Type, Type> executionHandlers, Type queryObject, Type handler)
+        {
+            if (executionHandlers.ContainsKey(queryObject))
+                throw new Exception($"Duplicate handler for {queryObject}: {executionHandlers[queryObject]} and {handler}");
+
+            executionHandlers.Add(queryObject, handler);
         }
 
         protected virtual Type GetHandlerType(object action, IDictionary<Type, Type> handlers, string interfaceName)
