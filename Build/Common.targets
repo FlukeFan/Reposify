@@ -17,7 +17,7 @@
     <BuildUtil>$(MSBuildThisFileDirectory)\BuildUtil\bin\Debug\netcoreapp2.1\Build.BuildUtil.dll</BuildUtil>
     <AltCover>$(NuGetPackageRoot)altcover\5.0.664\tools\netcoreapp2.0\AltCover.dll</AltCover>
     <VsTestConsole>$(MSBuildExtensionsPath)vstest.console.dll</VsTestConsole>
-    <ReportGenerator>$(NuGetPackageRoot)reportgenerator\4.0.6\tools\netcoreapp2.0\ReportGenerator.dll</ReportGenerator>
+    <ReportGenerator>$(NuGetPackageRoot)reportgenerator\4.0.9\tools\netcoreapp2.0\ReportGenerator.dll</ReportGenerator>
 
     <TestAssembly>$(AssemblyName).dll</TestAssembly>
     <Quot>"</Quot>
