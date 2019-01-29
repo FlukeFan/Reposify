@@ -7,8 +7,8 @@
             AddHandlersFromAssemblyForType<T>(
                 executionHandlerInterface:      typeof(INhExecutionHandler<>),
                 queryHandlerInterface:          typeof(INhQueryHandler<,>),
-                executionAsyncHandlerInterface: null,
-                queryAsyncHandlerInterface:     null);
+                executionAsyncHandlerInterface: typeof(INhExecutionAsyncHandler<>),
+                queryAsyncHandlerInterface:     typeof(INhQueryAsyncHandler<,>));
 
             return this;
         }

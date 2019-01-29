@@ -9,6 +9,7 @@ namespace Reposify.NHibernate
         IIdentityMapRepository,
         IRepositoryAsync,
         IDbExecutor,
+        IDbExecutorAsync,
         ILinqQueryable,
         IDbLinqExecutor,
         IDisposable
@@ -65,6 +66,16 @@ namespace Reposify.NHibernate
             return _handlers.Execute(this, dbQuery);
         }
 
+        public Task ExecuteAsync(IDbExecution dbExecution)
+        {
+            return _handlers.ExecuteAsync(this, dbExecution);
+        }
+
+        public Task<T> ExecuteAsync<T>(IDbQuery<T> dbQuery)
+        {
+            return _handlers.ExecuteAsync(this, dbQuery);
+        }
+
         public virtual T Save<T>(T entity) where T : class, IEntity
         {
             _session.Save(entity);
@@ -91,20 +102,20 @@ namespace Reposify.NHibernate
             _session.Clear();
         }
 
-        async Task<T> IRepositoryAsync.SaveAsync<T>(T entity)
+        public virtual async Task<T> SaveAsync<T>(T entity) where T : class, IEntity
         {
             await _session.SaveAsync(entity);
             return entity;
         }
 
-        Task<T> IRepositoryAsync.LoadAsync<T>(object id)
+        public virtual async Task<T> LoadAsync<T>(object id) where T : class, IEntity
         {
-            return _session.LoadAsync<T>(id);
+            return await _session.LoadAsync<T>(id);
         }
 
-        Task IRepositoryAsync.DeleteAsync<T>(T entity)
+        public async virtual Task DeleteAsync<T>(T entity) where T : class, IEntity
         {
-            return _session.DeleteAsync(entity);
+            await _session.DeleteAsync(entity);
         }
 
         public IQueryable<T> Query<T>() where T : class
