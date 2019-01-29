@@ -11,7 +11,6 @@ namespace Reposify.Testing
         IDbExecutor,
         IDbExecutorAsync,
         IDbLinqExecutor,
-        IDbLinqExecutorAsync,
         ILinqQueryable,
         IDisposable
     {
@@ -137,11 +136,6 @@ namespace Reposify.Testing
         public TResult Execute<TEntity, TResult>(IDbLinq<TEntity, TResult> query) where TEntity : class
         {
             return query.Execute(Query<TEntity>());
-        }
-
-        public Task<TResult> ExecuteAsync<TEntity, TResult>(IDbLinqAsync<TEntity, TResult> query) where TEntity : class
-        {
-            return query.ExecuteAsync(Query<TEntity>());
         }
 
         public void Dispose()

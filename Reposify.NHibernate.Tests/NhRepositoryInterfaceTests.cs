@@ -23,11 +23,6 @@ namespace Reposify.NHibernate.Tests
         protected override IDisposable New() { return NhRepositoryTests.NewNhRepository(); }
     }
 
-    public class NhRepositoryDbLinqExecutorAsyncTests : IDbLinqExecutorAsyncTests
-    {
-        protected override IDisposable New() { return NhRepositoryTests.NewNhRepository(); }
-    }
-
     public class NhRepositoryLinqQueryableTests : ILinqQueryableTests
     {
         protected override IDisposable New() { return NhRepositoryTests.NewNhRepository(); }
