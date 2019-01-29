@@ -27,9 +27,11 @@
   </Target>
 
   <Target Name="Push">
-    <Error Text="need to update this" />
     <Exec Command="dotnet msbuild build.proj /p:RunTests=true /p:Configuration=Release" />
     <Exec Command="dotnet nuget push Reposify/bin/Release/Reposify.$(Version).nupkg --source nuget.org" />
+    <Exec Command="dotnet nuget push Reposify.Testing/bin/Release/Reposify.Testing.$(Version).nupkg --source nuget.org" />
+    <Exec Command="dotnet nuget push Reposify.NHibernate/bin/Release/Reposify.NHibernate.$(Version).nupkg --source nuget.org" />
+    <Exec Command="dotnet nuget push Reposify.EFCore/bin/Release/Reposify.EFCore.$(Version).nupkg --source nuget.org" />
     <Exec Command="dotnet clean build.proj" />
     <Message Importance="high" Text="Version $(Version) pushed to nuget.org" />
   </Target>
