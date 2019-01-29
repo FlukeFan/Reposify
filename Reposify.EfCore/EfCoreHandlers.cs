@@ -7,8 +7,8 @@
             AddHandlersFromAssemblyForType<T>(
                 executionHandlerInterface:      typeof(IEfCoreExecutionHandler<>),
                 queryHandlerInterface:          typeof(IEfCoreQueryHandler<,>),
-                executionAsyncHandlerInterface: null,
-                queryAsyncHandlerInterface:     null);
+                executionAsyncHandlerInterface: typeof(IEfCoreExecutionAsyncHandler<>),
+                queryAsyncHandlerInterface:     typeof(IEfCoreQueryAsyncHandler<,>));
 
             return this;
         }

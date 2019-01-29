@@ -10,6 +10,7 @@ namespace Reposify.EfCore
         IIdentityMapRepository,
         IRepositoryAsync,
         IDbExecutor,
+        IDbExecutorAsync,
         ILinqQueryable,
         IDbLinqExecutor,
         IDisposable
@@ -53,6 +54,16 @@ namespace Reposify.EfCore
             return _handlers.Execute(this, dbQuery);
         }
 
+        public Task ExecuteAsync(IDbExecution dbExecution)
+        {
+            return _handlers.ExecuteAsync(this, dbExecution);
+        }
+
+        public Task<T> ExecuteAsync<T>(IDbQuery<T> dbQuery)
+        {
+            return _handlers.ExecuteAsync(this, dbQuery);
+        }
+
         public virtual T Save<T>(T entity) where T : class, IEntity
         {
             _dbContext.Set<T>().Add(entity);
@@ -79,19 +90,19 @@ namespace Reposify.EfCore
         {
         }
 
-        async Task<T> IRepositoryAsync.SaveAsync<T>(T entity)
+        public virtual async Task<T> SaveAsync<T>(T entity) where T : class, IEntity
         {
             await _dbContext.Set<T>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
             return entity;
         }
 
-        Task<T> IRepositoryAsync.LoadAsync<T>(object id)
+        public virtual Task<T> LoadAsync<T>(object id) where T : class, IEntity
         {
             return _dbContext.Set<T>().FindAsync(id);
         }
 
-        Task IRepositoryAsync.DeleteAsync<T>(T entity)
+        public virtual Task DeleteAsync<T>(T entity) where T : class, IEntity
         {
             _dbContext.Set<T>().Remove(entity);
             return _dbContext.SaveChangesAsync();
