@@ -12,6 +12,11 @@ namespace Reposify.Tests.Testing
         protected override IDisposable New() { return MemoryRepositoryTests.NewMemoryRepository(); }
     }
 
+    public class MemoryRepositoryDbLinqExecutorAsyncTests : IDbLinqExecutorAsyncTests
+    {
+        protected override IDisposable New() { return MemoryRepositoryTests.NewMemoryRepository(); }
+    }
+
     public class MemoryRepositoryLinqQueryableTests : ILinqQueryableTests
     {
         protected override IDisposable New() { return MemoryRepositoryTests.NewMemoryRepository(); }
