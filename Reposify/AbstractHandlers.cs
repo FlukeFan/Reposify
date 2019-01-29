@@ -2,22 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Reposify
 {
     public abstract class AbstractHandlers
     {
-        private string _executionHandlerInterfaceName = "IDbExecution";
-        private string _queryHandlerInterfaceName = "IDbExecution";
+        private string _executionHandlerInterfaceName       = "unregistered interface IDbExecution";
+        private string _queryHandlerInterfaceName           = "unregistered interface IDbQuery";
+        private string _executionAsyncHandlerInterfaceName  = "unregistered interface async IDbExecution";
+        private string _queryAsyncHandlerInterfaceName      = "unregistered interface async IDbQuery";
 
-        private IDictionary<Type, Type> _executionHandlers  = new Dictionary<Type, Type>();
-        private IDictionary<Type, Type> _queryHandlers      = new Dictionary<Type, Type>();
+        private IDictionary<Type, Type> _executionHandlers      = new Dictionary<Type, Type>();
+        private IDictionary<Type, Type> _queryHandlers          = new Dictionary<Type, Type>();
+        private IDictionary<Type, Type> _executionAsyncHandlers = new Dictionary<Type, Type>();
+        private IDictionary<Type, Type> _queryAsyncHandlers     = new Dictionary<Type, Type>();
 
         public Func<Type, object> HandlerFactory = t => Activator.CreateInstance(t);
 
         protected void AddHandlersFromAssemblyForType<T>(
             Type executionHandlerInterface,
-            Type queryHandlerInterface)
+            Type queryHandlerInterface,
+            Type executionAsyncHandlerInterface,
+            Type queryAsyncHandlerInterface)
         {
             var assembly = typeof(T).Assembly;
             var types = assembly.GetTypes()
@@ -33,16 +40,31 @@ namespace Reposify
 
                     var genericType = intrface.GetGenericTypeDefinition();
 
-                    if (genericType == executionHandlerInterface)
+                    if (executionHandlerInterface != null && genericType == executionHandlerInterface)
                         _executionHandlers[intrface.GenericTypeArguments[0]] = type;
 
-                    if (genericType == queryHandlerInterface)
+                    if (queryHandlerInterface != null && genericType == queryHandlerInterface)
                         _queryHandlers[intrface.GenericTypeArguments[0]] = type;
+
+                    if (executionAsyncHandlerInterface != null && genericType == executionAsyncHandlerInterface)
+                        _executionAsyncHandlers[intrface.GenericTypeArguments[0]] = type;
+
+                    if (queryAsyncHandlerInterface != null && genericType == queryAsyncHandlerInterface)
+                        _queryAsyncHandlers[intrface.GenericTypeArguments[0]] = type;
                 }
             }
 
-            _executionHandlerInterfaceName = executionHandlerInterface.Name.Split('`')[0];
-            _queryHandlerInterfaceName = queryHandlerInterface.Name.Split('`')[0];
+            if (executionHandlerInterface != null)
+                _executionHandlerInterfaceName = executionHandlerInterface.Name.Split('`')[0];
+
+            if (queryHandlerInterface != null)
+                _queryHandlerInterfaceName = queryHandlerInterface.Name.Split('`')[0];
+
+            if (executionAsyncHandlerInterface != null)
+                _executionAsyncHandlerInterfaceName = executionAsyncHandlerInterface.Name.Split('`')[0];
+
+            if (queryAsyncHandlerInterface != null)
+                _queryAsyncHandlerInterfaceName = queryAsyncHandlerInterface.Name.Split('`')[0];
         }
 
         public virtual void Execute(IDbExecutor executor, IDbExecution dbExecution)
@@ -62,6 +84,26 @@ namespace Reposify
 
             var result = execute.Invoke(handler, new object[] { executor, dbQuery });
             return (TResult)result;
+        }
+
+        public virtual Task ExecuteAsync(IDbExecutor executor, IDbExecution dbExecution)
+        {
+            var handlerType = GetHandlerType(dbExecution, _executionAsyncHandlers, _executionAsyncHandlerInterfaceName);
+            var handler = HandlerFactory(handlerType);
+            var execute = GetExecuteMethod(handlerType, _executionAsyncHandlerInterfaceName, "ExecuteAsync");
+
+            var result = execute.Invoke(handler, new object[] { executor, dbExecution });
+            return (Task)result;
+        }
+
+        public virtual Task<TResult> ExecuteAsync<TResult>(IDbExecutor executor, IDbQuery<TResult> dbQuery)
+        {
+            var handlerType = GetHandlerType(dbQuery, _queryAsyncHandlers, _queryAsyncHandlerInterfaceName);
+            var handler = HandlerFactory(handlerType);
+            var execute = GetExecuteMethod(handlerType, _queryAsyncHandlerInterfaceName, "ExecuteAsync");
+
+            var result = execute.Invoke(handler, new object[] { executor, dbQuery });
+            return (Task<TResult>)result;
         }
 
         protected virtual Type GetHandlerType(object action, IDictionary<Type, Type> handlers, string interfaceName)

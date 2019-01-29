@@ -21,4 +21,9 @@ namespace Reposify.Tests.Testing
     {
         protected override IDisposable New() { return MemoryRepositoryTests.NewMemoryRepository(); }
     }
+
+    public class MemoryRepositoryDbExecutorAsyncTests : IDbExecutorAsyncTests
+    {
+        protected override IDisposable New() { return MemoryRepositoryTests.NewMemoryRepository(); }
+    }
 }

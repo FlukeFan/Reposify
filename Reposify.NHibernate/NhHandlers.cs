@@ -5,8 +5,10 @@
         public NhHandlers UsingHandlersFromAssemblyForType<T>()
         {
             AddHandlersFromAssemblyForType<T>(
-                executionHandlerInterface: typeof(INhExecutionHandler<>),
-                queryHandlerInterface: typeof(INhQueryHandler<,>));
+                executionHandlerInterface:      typeof(INhExecutionHandler<>),
+                queryHandlerInterface:          typeof(INhQueryHandler<,>),
+                executionAsyncHandlerInterface: null,
+                queryAsyncHandlerInterface:     null);
 
             return this;
         }

@@ -9,6 +9,7 @@ namespace Reposify.Testing
         IRepository,
         IRepositoryAsync,
         IDbExecutor,
+        IDbExecutorAsync,
         IDbLinqExecutor,
         ILinqQueryable,
         IDisposable
@@ -38,6 +39,16 @@ namespace Reposify.Testing
         public T Execute<T>(IDbQuery<T> dbQuery)
         {
             return _handlers.Execute(this, dbQuery);
+        }
+
+        public Task ExecuteAsync(IDbExecution dbExecution)
+        {
+            return _handlers.ExecuteAsync(this, dbExecution);
+        }
+
+        public Task<T> ExecuteAsync<T>(IDbQuery<T> dbQuery)
+        {
+            return _handlers.ExecuteAsync(this, dbQuery);
         }
 
         public virtual T Save<T>(T entity) where T : class, IEntity
@@ -72,17 +83,17 @@ namespace Reposify.Testing
         }
 
 
-        Task<T> IRepositoryAsync.SaveAsync<T>(T entity)
+        public virtual Task<T> SaveAsync<T>(T entity) where T : class, IEntity
         {
             return Task.FromResult(Save(entity));
         }
 
-        Task<T> IRepositoryAsync.LoadAsync<T>(object id)
+        public virtual Task<T> LoadAsync<T>(object id) where T : class, IEntity
         {
             return Task.FromResult(Load<T>(id));
         }
 
-        Task IRepositoryAsync.DeleteAsync<T>(T entity)
+        public virtual Task DeleteAsync<T>(T entity) where T : class, IEntity
         {
             Delete(entity);
             return Task.CompletedTask;
