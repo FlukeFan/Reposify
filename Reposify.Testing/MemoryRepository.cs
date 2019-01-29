@@ -139,9 +139,9 @@ namespace Reposify.Testing
             return query.Execute(Query<TEntity>());
         }
 
-        public Task<TResult> ExecuteAsync<TEntity, TResult>(IDbLinq<TEntity, TResult> query) where TEntity : class
+        public Task<TResult> ExecuteAsync<TEntity, TResult>(IDbLinqAsync<TEntity, TResult> query) where TEntity : class
         {
-            return Task.FromResult(Execute(query));
+            return query.ExecuteAsync(Query<TEntity>());
         }
 
         public void Dispose()

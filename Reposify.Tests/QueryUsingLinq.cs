@@ -1,8 +1,9 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace Reposify.Tests
 {
-    public class QueryUsingLinq : IDbLinq<PolyType, int>
+    public class QueryUsingLinq : IDbLinq<PolyType, int>, IDbLinqAsync<PolyType, int>
     {
         public string StringValue;
 
@@ -11,6 +12,13 @@ namespace Reposify.Tests
             return queryable
                 .Where(q => q.String == StringValue)
                 .Count();
+        }
+
+        public Task<int> ExecuteAsync(IQueryable<PolyType> queryable)
+        {
+            return Task.FromResult(queryable
+                .Where(q => q.String == StringValue)
+                .Count());
         }
     }
 }
