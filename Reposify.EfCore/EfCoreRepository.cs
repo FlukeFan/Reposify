@@ -10,11 +10,13 @@ namespace Reposify.EfCore
     public class EfCoreRepository :
         IRepository,
         IRepositoryAsync,
+        IUnitOfWork,
+        IUnitOfWorkAsync,
+        IIdentityMapReloadable,
         IDbExecutor,
         IDbExecutorAsync,
         ILinqQueryable,
         IDbLinqExecutor,
-        IIdentityMapReloadable,
         IDisposable
     {
         protected DbContext                 _dbContext;
@@ -69,7 +71,6 @@ namespace Reposify.EfCore
         public virtual T Save<T>(T entity) where T : class, IEntity
         {
             _dbContext.Set<T>().Add(entity);
-            _dbContext.SaveChanges();
             return entity;
         }
 
@@ -81,11 +82,16 @@ namespace Reposify.EfCore
         public virtual void Delete<T>(T entity) where T : class, IEntity
         {
             _dbContext.Set<T>().Remove(entity);
-            _dbContext.SaveChanges();
         }
 
         public virtual void Flush()
         {
+            _dbContext.SaveChanges();
+        }
+
+        public virtual Task FlushAsync()
+        {
+            return _dbContext.SaveChangesAsync();
         }
 
         public virtual void ReloadAll()
@@ -97,7 +103,6 @@ namespace Reposify.EfCore
         public virtual async Task<T> SaveAsync<T>(T entity) where T : class, IEntity
         {
             await _dbContext.Set<T>().AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
             return entity;
         }
 
@@ -109,7 +114,7 @@ namespace Reposify.EfCore
         public virtual Task DeleteAsync<T>(T entity) where T : class, IEntity
         {
             _dbContext.Set<T>().Remove(entity);
-            return _dbContext.SaveChangesAsync();
+            return Task.CompletedTask;
         }
 
         public IQueryable<T> Query<T>() where T : class

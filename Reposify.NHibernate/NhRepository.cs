@@ -8,11 +8,13 @@ namespace Reposify.NHibernate
     public class NhRepository :
         IRepository,
         IRepositoryAsync,
+        IUnitOfWork,
+        IUnitOfWorkAsync,
+        IIdentityMapClearable,
         IDbExecutor,
         IDbExecutorAsync,
         ILinqQueryable,
         IDbLinqExecutor,
-        IIdentityMapClearable,
         IDisposable
     {
         /// <summary> creates a new session and begins a new transaction </summary>
@@ -96,6 +98,11 @@ namespace Reposify.NHibernate
         public virtual void Flush()
         {
             _session.Flush();
+        }
+
+        public virtual Task FlushAsync()
+        {
+            return _session.FlushAsync();
         }
 
         public virtual void Clear()

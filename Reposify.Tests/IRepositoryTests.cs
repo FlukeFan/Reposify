@@ -8,6 +8,7 @@ namespace Reposify.Tests
     public abstract class IRepositoryTests : IDisposableTests
     {
         private IRepository     Repository      { get => (IRepository)_disposable; }
+        private IUnitOfWork     UnitOfWork      { get => (IUnitOfWork)_disposable; }
         private ILinqQueryable  LinqQueryable   { get => (ILinqQueryable)_disposable; }
 
         [Test]
@@ -56,6 +57,8 @@ namespace Reposify.Tests
             var poly2 = new PolyTypeBuilder().Save(Repository);
 
             Repository.Delete(poly1);
+
+            UnitOfWork.Flush();
 
             var allSaved = LinqQueryable.Query<PolyType>().ToList();
 

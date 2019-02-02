@@ -11,12 +11,16 @@ namespace Reposify.NHibernate.Tests
         {
             foreach (var entity in dbExecution.EntitiesToSave)
                 repository.Save(entity);
+
+            repository.Flush();
         }
 
         async Task IEfCoreExecutionAsyncHandler<QuerySaveEntities>.ExecuteAsync(EfCoreRepository repository, QuerySaveEntities dbExecution)
         {
             foreach (var entity in dbExecution.EntitiesToSave)
                 await repository.SaveAsync(entity);
+
+            await repository.FlushAsync();
         }
     }
 }

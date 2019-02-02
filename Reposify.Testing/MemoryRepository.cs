@@ -8,6 +8,8 @@ namespace Reposify.Testing
     public class MemoryRepository :
         IRepository,
         IRepositoryAsync,
+        IUnitOfWork,
+        IUnitOfWorkAsync,
         IDbExecutor,
         IDbExecutorAsync,
         IDbLinqExecutor,
@@ -82,6 +84,10 @@ namespace Reposify.Testing
             // no externally visible behaviour to implement
         }
 
+        public virtual Task FlushAsync()
+        {
+            return Task.CompletedTask;
+        }
 
         public virtual Task<T> SaveAsync<T>(T entity) where T : class, IEntity
         {

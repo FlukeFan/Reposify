@@ -6,6 +6,7 @@ namespace Reposify.Tests
     public abstract class IDbLinqExecutorTests : IDisposableTests
     {
         private IRepository     Repository      { get => (IRepository)_disposable; }
+        private IUnitOfWork     UnitOfWork      { get => (IUnitOfWork)_disposable; }
         private IDbLinqExecutor DbLinqExecutor  { get => (IDbLinqExecutor)_disposable; }
 
         [Test]
@@ -15,6 +16,8 @@ namespace Reposify.Tests
             Repository.Save(new PolyTypeBuilder().With(p => p.String, "poly2").Value());
             Repository.Save(new PolyTypeBuilder().With(p => p.String, "poly2").Value());
             Repository.Save(new PolyTypeBuilder().With(p => p.String, "poly3").Value());
+
+            UnitOfWork.Flush();
 
             var count = DbLinqExecutor.Execute(new QueryUsingLinq { StringValue = "poly2" });
 

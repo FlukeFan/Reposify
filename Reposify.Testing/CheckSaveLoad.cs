@@ -42,7 +42,7 @@ namespace Reposify.Testing
         public virtual TEntity Check()
         {
             _repository.Save(_entity);
-            _repository.Flush();
+            (_repository as IUnitOfWork)?.Flush();
 
             var originalEntity = _entity;
 
