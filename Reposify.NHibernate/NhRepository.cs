@@ -6,12 +6,13 @@ using NHibernate;
 namespace Reposify.NHibernate
 {
     public class NhRepository :
-        IIdentityMapRepository,
+        IRepository,
         IRepositoryAsync,
         IDbExecutor,
         IDbExecutorAsync,
         ILinqQueryable,
         IDbLinqExecutor,
+        IIdentityMapClearable,
         IDisposable
     {
         /// <summary> creates a new session and begins a new transaction </summary>

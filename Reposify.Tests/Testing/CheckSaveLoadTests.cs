@@ -19,15 +19,6 @@ namespace Reposify.Tests.Testing
         }
 
         [Test]
-        public void WhenLoadedObjectRefersToOriginalEntity_Fails()
-        {
-            var entity = new PolyTypeBuilder(true).With(pt => pt.BigString, null).Value();
-            var loadedEntity = entity;
-
-            VerifyThrows(entity, entity).Message.Should().Contain("different instance");
-        }
-
-        [Test]
         public void WhenInputPropertyIsNull_Fails()
         {
             var entity = new PolyTypeBuilder(true).With(pt => pt.BigString, null).Value();

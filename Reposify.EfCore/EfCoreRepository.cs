@@ -2,17 +2,19 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Reposify.EfCore
 {
     public class EfCoreRepository :
-        IIdentityMapRepository,
+        IRepository,
         IRepositoryAsync,
         IDbExecutor,
         IDbExecutorAsync,
         ILinqQueryable,
         IDbLinqExecutor,
+        IIdentityMapReloadable,
         IDisposable
     {
         protected DbContext                 _dbContext;
@@ -86,8 +88,10 @@ namespace Reposify.EfCore
         {
         }
 
-        public virtual void Clear()
+        public virtual void ReloadAll()
         {
+            foreach (EntityEntry entry in _dbContext.ChangeTracker.Entries())
+                entry.Reload();
         }
 
         public virtual async Task<T> SaveAsync<T>(T entity) where T : class, IEntity

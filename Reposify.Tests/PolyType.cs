@@ -2,6 +2,7 @@
 
 namespace Reposify.Tests
 {
+    [Serializable]
     public class PolyType : TestsEntity
     {
         public enum Values

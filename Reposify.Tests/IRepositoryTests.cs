@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using Reposify.Testing;
 
 namespace Reposify.Tests
 {
@@ -61,6 +62,18 @@ namespace Reposify.Tests
             allSaved.Count.Should().Be(1, "poly2 should have been deleted from the repository");
             allSaved[0].Id.Should().NotBe(poly1.Id);
             allSaved[0].Id.Should().Be(poly2.Id);
+        }
+
+        [Test]
+        public void CheckSaveLoad()
+        {
+            var subType = new PolyTypeBuilder().Save(Repository);
+
+            var entity = new PolyTypeBuilder()
+                .With(e => e.SubType, subType)
+                .Value();
+
+            entity.CheckSaveLoad(Repository).Check();
         }
     }
 }

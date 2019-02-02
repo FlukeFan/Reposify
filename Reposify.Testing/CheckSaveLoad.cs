@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Reposify.Testing
 {
@@ -41,12 +44,22 @@ namespace Reposify.Testing
             _repository.Save(_entity);
             _repository.Flush();
 
-            // clear the repository if it supports identity map
-            (_repository as IIdentityMapRepository)?.Clear();
+            var originalEntity = _entity;
+
+            if (_repository is IIdentityMapClearable)
+            {
+                // clear the repository if it supports identity map
+                (_repository as IIdentityMapClearable).Clear();
+            }
+            else
+            {
+                originalEntity = DeepClone(_entity);
+                (_repository as IIdentityMapReloadable)?.ReloadAll();
+            }
 
             var loadedEntity = _repository.Load<TEntity>(_entity.Id);
             var visitor = new PropertyVisitor(CheckProperty);
-            Check(_entity, loadedEntity, visitor);
+            Check(originalEntity, loadedEntity, visitor);
             return loadedEntity;
         }
     }
@@ -131,6 +144,18 @@ namespace Reposify.Testing
             }
 
             CustomCheck(property, original, compare, rootName);
+        }
+
+        protected virtual T DeepClone<T>(T original)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new MemoryStream();
+            using (stream)
+            {
+                formatter.Serialize(stream, original);
+                stream.Seek(0, SeekOrigin.Begin);
+                return (T)formatter.Deserialize(stream);
+            }
         }
 
         public class PropertyVisitor

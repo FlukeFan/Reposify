@@ -1,7 +1,12 @@
 ﻿namespace Reposify
 {
-    public interface IIdentityMapRepository : IRepository // TODO: make this a separate interface without inheritance
+    public interface IIdentityMapClearable
     {
         void Clear();
+    }
+
+    public interface IIdentityMapReloadable
+    {
+        void ReloadAll();
     }
 }

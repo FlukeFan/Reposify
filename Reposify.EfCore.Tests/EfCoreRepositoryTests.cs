@@ -51,10 +51,5 @@ namespace Reposify.EfCore.Tests
         {
             return EfCoreRepositoryTests.NewEfCoreRepository();
         }
-
-        public override void TearDown()
-        {
-            base.TearDown();
-        }
     }
 }
