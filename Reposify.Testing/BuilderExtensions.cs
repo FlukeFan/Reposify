@@ -7,13 +7,17 @@ namespace Reposify.Testing
         public static T Save<T>(this Builder<T> builder, IRepository repository) where T : class, IEntity
         {
             var entity = builder.Value();
-            return repository.Save(entity);
+            entity = repository.Save(entity);
+            (repository as IUnitOfWork)?.Flush();
+            return entity;
         }
 
-        public static Task<T> SaveAsync<T>(this Builder<T> builder, IRepositoryAsync repository) where T : class, IEntity
+        public static async Task<T> SaveAsync<T>(this Builder<T> builder, IRepositoryAsync repository) where T : class, IEntity
         {
             var entity = builder.Value();
-            return repository.SaveAsync(entity);
+            entity = await repository.SaveAsync(entity);
+            await (repository as IUnitOfWorkAsync)?.FlushAsync();
+            return entity;
         }
     }
 }

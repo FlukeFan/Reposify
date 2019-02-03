@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Reposify.Tests
 {
@@ -29,6 +30,18 @@ namespace Reposify.Tests
         public static string ConfigFolder(string searchFolder, string name, string config)
         {
             return Path.Combine(searchFolder, name, "bin", config);
+        }
+
+        public static async Task AssertThrowsAsync(Func<Task> task)
+        {
+            try
+            {
+                await task();
+                throw new Exception($"Expected exception, but none was thrown");
+            } catch
+            {
+                // success
+            }
         }
     }
 }

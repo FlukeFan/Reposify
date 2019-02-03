@@ -41,11 +41,11 @@ namespace Reposify.Tests
 
             await Repository.DeleteAsync(poly);
 
-            Assert.That(async () =>
+            await TestUtil.AssertThrowsAsync(async () =>
             {
                 var saved = await Repository.LoadAsync<PolyType>(poly.Id);
                 saved.String.Should().Be(poly.String);
-            }, Throws.Exception);
+            });
         }
     }
 }
