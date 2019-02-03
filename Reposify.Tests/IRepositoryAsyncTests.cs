@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
+using Reposify.Testing;
 
 namespace Reposify.Tests
 {
