@@ -119,9 +119,19 @@ namespace Reposify.Testing
             return query.Prepare(Query<TEntity>()).ToList();
         }
 
+        public virtual long Count<TEntity>(IDbLinq<TEntity> query) where TEntity : class
+        {
+            return query.Prepare(Query<TEntity>()).Count();
+        }
+
         public virtual Task<List<TEntity>> ListAsync<TEntity>(IDbLinq<TEntity> query) where TEntity : class
         {
             return Task.FromResult(List(query));
+        }
+
+        public virtual Task<long> CountAsync<TEntity>(IDbLinq<TEntity> query) where TEntity : class
+        {
+            return Task.FromResult(Count(query));
         }
 
         public IList<T> All<T>() where T : class, IEntity

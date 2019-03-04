@@ -22,6 +22,10 @@ namespace Reposify.Tests
             var list = DbLinqExecutor.List(new QueryUsingLinq { StringValue = "poly2" });
 
             list.Count.Should().Be(2);
+
+            var count = DbLinqExecutor.Count(new QueryUsingLinq { StringValue = "poly2" });
+
+            count.Should().Be(2);
         }
     }
 }

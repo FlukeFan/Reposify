@@ -139,9 +139,19 @@ namespace Reposify.NHibernate
             return query.Prepare(Query<TEntity>()).ToList();
         }
 
+        public long Count<TEntity>(IDbLinq<TEntity> query) where TEntity : class
+        {
+            return query.Prepare(Query<TEntity>()).Count();
+        }
+
         public async Task<List<TEntity>> ListAsync<TEntity>(IDbLinq<TEntity> query) where TEntity : class
         {
             return await query.Prepare(Query<TEntity>()).ToListAsync();
+        }
+
+        public async Task<long> CountAsync<TEntity>(IDbLinq<TEntity> query) where TEntity : class
+        {
+            return await query.Prepare(Query<TEntity>()).CountAsync();
         }
 
         public virtual void Dispose()
