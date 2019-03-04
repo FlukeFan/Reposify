@@ -12,7 +12,7 @@ namespace Reposify.Testing
         IUnitOfWorkAsync,
         IDbExecutor,
         IDbExecutorAsync,
-        IDbLinqExecutor,
+        IDbLinqExecutorAsync,
         ILinqQueryable,
         IDisposable
     {
@@ -105,6 +105,20 @@ namespace Reposify.Testing
             return Task.CompletedTask;
         }
 
+        public virtual IQueryable<T> Query<T>() where T : class
+        {
+            return _entities
+                .Where(e => typeof(T).IsAssignableFrom(e.GetType()))
+                .Cast<T>()
+                .AsQueryable();
+        }
+
+        public virtual Task<List<TEntity>> ListAsync<TEntity>(IDbLinq<TEntity> query) where TEntity : class
+        {
+            var result = query.Prepare(Query<TEntity>()).ToList();
+            return Task.FromResult(result);
+        }
+
         public IList<T> All<T>() where T : class, IEntity
         {
             ILinqQueryable qr = this;
@@ -131,20 +145,7 @@ namespace Reposify.Testing
                 throw new Exception(string.Format("Could not find entity with id {0} and type {1} in the Repository", id, typeof(T)));
         }
 
-        public IQueryable<T> Query<T>() where T : class
-        {
-            return _entities
-                .Where(e => typeof(T).IsAssignableFrom(e.GetType()))
-                .Cast<T>()
-                .AsQueryable();
-        }
-
-        public TResult Execute<TEntity, TResult>(IDbLinq<TEntity, TResult> query) where TEntity : class
-        {
-            return query.Execute(Query<TEntity>());
-        }
-
-        public void Dispose()
+        public virtual void Dispose()
         {
         }
     }

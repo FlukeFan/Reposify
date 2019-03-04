@@ -18,7 +18,7 @@ namespace Reposify.EfCore.Tests
         protected override IDisposable New() { return EfCoreRepositoryTests.NewEfCoreRepository(); }
     }
 
-    public class EfCoreRepositoryDbLinqExecutorTests : IDbLinqExecutorTests
+    public class EfCoreRepositoryDbLinqExecutorAsyncTests : IDbLinqExecutorAsyncTests
     {
         protected override IDisposable New() { return EfCoreRepositoryTests.NewEfCoreRepository(); }
     }

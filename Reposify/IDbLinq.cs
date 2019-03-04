@@ -2,8 +2,8 @@
 
 namespace Reposify
 {
-    public interface IDbLinq<TEntity, TResult>
+    public interface IDbLinq<TEntity>
     {
-        TResult Execute(IQueryable<TEntity> queryable);
+        IQueryable<TEntity> Prepare(IQueryable<TEntity> queryable);
     }
 }

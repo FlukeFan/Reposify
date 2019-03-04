@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NHibernate;
+using NHibernate.Linq;
 
 namespace Reposify.NHibernate
 {
@@ -14,7 +16,7 @@ namespace Reposify.NHibernate
         IDbExecutor,
         IDbExecutorAsync,
         ILinqQueryable,
-        IDbLinqExecutor,
+        IDbLinqExecutorAsync,
         IDisposable
     {
         /// <summary> creates a new session and begins a new transaction </summary>
@@ -131,9 +133,9 @@ namespace Reposify.NHibernate
             return _session.Query<T>();
         }
 
-        public TResult Execute<TEntity, TResult>(IDbLinq<TEntity, TResult> query) where TEntity : class
+        public async Task<List<TEntity>> ListAsync<TEntity>(IDbLinq<TEntity> query) where TEntity : class
         {
-            return query.Execute(Query<TEntity>());
+            return await query.Prepare(Query<TEntity>()).ToListAsync();
         }
 
         public virtual void Dispose()

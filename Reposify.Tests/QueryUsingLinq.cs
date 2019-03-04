@@ -2,15 +2,14 @@
 
 namespace Reposify.Tests
 {
-    public class QueryUsingLinq : IDbLinq<PolyType, int>
+    public class QueryUsingLinq : IDbLinq<PolyType>
     {
         public string StringValue;
 
-        public int Execute(IQueryable<PolyType> queryable)
+        public IQueryable<PolyType> Prepare(IQueryable<PolyType> queryable)
         {
             return queryable
-                .Where(q => q.String == StringValue)
-                .Count();
+                .Where(q => q.String == StringValue);
         }
     }
 }

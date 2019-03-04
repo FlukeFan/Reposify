@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ namespace Reposify.EfCore
         IDbExecutor,
         IDbExecutorAsync,
         ILinqQueryable,
-        IDbLinqExecutor,
+        IDbLinqExecutorAsync,
         IDisposable
     {
         protected DbContext                 _dbContext;
@@ -122,9 +123,9 @@ namespace Reposify.EfCore
             return _dbContext.Set<T>();
         }
 
-        public TResult Execute<TEntity, TResult>(IDbLinq<TEntity, TResult> query) where TEntity : class
+        public async Task<List<TEntity>> ListAsync<TEntity>(IDbLinq<TEntity> query) where TEntity : class
         {
-            return query.Execute(Query<TEntity>());
+            return await query.Prepare(Query<TEntity>()).ToListAsync();
         }
 
         public virtual void Dispose()
