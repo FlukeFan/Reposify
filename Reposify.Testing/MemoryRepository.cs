@@ -12,6 +12,7 @@ namespace Reposify.Testing
         IUnitOfWorkAsync,
         IDbExecutor,
         IDbExecutorAsync,
+        IDbLinqExecutor,
         IDbLinqExecutorAsync,
         ILinqQueryable,
         IDisposable
@@ -113,10 +114,14 @@ namespace Reposify.Testing
                 .AsQueryable();
         }
 
+        public virtual List<TEntity> List<TEntity>(IDbLinq<TEntity> query) where TEntity : class
+        {
+            return query.Prepare(Query<TEntity>()).ToList();
+        }
+
         public virtual Task<List<TEntity>> ListAsync<TEntity>(IDbLinq<TEntity> query) where TEntity : class
         {
-            var result = query.Prepare(Query<TEntity>()).ToList();
-            return Task.FromResult(result);
+            return Task.FromResult(List(query));
         }
 
         public IList<T> All<T>() where T : class, IEntity

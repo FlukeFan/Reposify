@@ -16,6 +16,7 @@ namespace Reposify.NHibernate
         IDbExecutor,
         IDbExecutorAsync,
         ILinqQueryable,
+        IDbLinqExecutor,
         IDbLinqExecutorAsync,
         IDisposable
     {
@@ -131,6 +132,11 @@ namespace Reposify.NHibernate
         public IQueryable<T> Query<T>() where T : class
         {
             return _session.Query<T>();
+        }
+
+        public List<TEntity> List<TEntity>(IDbLinq<TEntity> query) where TEntity : class
+        {
+            return query.Prepare(Query<TEntity>()).ToList();
         }
 
         public async Task<List<TEntity>> ListAsync<TEntity>(IDbLinq<TEntity> query) where TEntity : class

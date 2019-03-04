@@ -17,6 +17,7 @@ namespace Reposify.EfCore
         IDbExecutor,
         IDbExecutorAsync,
         ILinqQueryable,
+        IDbLinqExecutor,
         IDbLinqExecutorAsync,
         IDisposable
     {
@@ -121,6 +122,11 @@ namespace Reposify.EfCore
         public IQueryable<T> Query<T>() where T : class
         {
             return _dbContext.Set<T>();
+        }
+
+        public List<TEntity> List<TEntity>(IDbLinq<TEntity> query) where TEntity : class
+        {
+            return query.Prepare(Query<TEntity>()).ToList();
         }
 
         public async Task<List<TEntity>> ListAsync<TEntity>(IDbLinq<TEntity> query) where TEntity : class
