@@ -3,7 +3,7 @@
 
   <PropertyGroup>
 
-    <Version>0.0.7</Version>
+    <Version>0.0.8</Version>
     <PackageTags>Repository Testing Tests Memory</PackageTags>
     <Authors>Richard Brown</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
